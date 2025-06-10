@@ -1,0 +1,983 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Membership Plans - Albany</title>
+    <link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        :root {
+            --primary: #722F37;
+            --primary-dark: #5a252c;
+            --secondary: #EFFBBB;
+            --dark: #2c1518;
+            --light: #f8fff0;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #722F37 0%, #8a3a44 100%);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        body {
+            font-family: 'Baloo Bhaijaan 2', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+        }
+
+        /* Header Styles */
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            padding: 1rem 0;
+        }
+
+        .navbar.scrolled {
+            padding: 0.5rem 0;
+            background-color: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .navbar-brand {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+        }
+
+        .nav-link {
+            color: var(--dark);
+            font-weight: 500;
+            padding: 0.5rem 1rem !important;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--primary);
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            background: var(--primary);
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 70%;
+        }
+
+        .dropdown-menu {
+            border-radius: 0.5rem;
+            box-shadow: var(--shadow-lg);
+            border: none;
+            padding: 0.5rem;
+        }
+
+        .dropdown-item {
+            padding: 0.5rem 1rem;
+            border-radius: 0.25rem;
+            transition: all 0.2s ease;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(114, 47, 55, 0.1);
+        }
+
+        .badge-premium {
+            background-color: #FFD700;
+            color: #000;
+            font-size: 0.7rem;
+            padding: 0.25em 0.5em;
+            border-radius: 0.25rem;
+            margin-left: 0.25rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .btn-login {
+            background-color: transparent;
+            border: 1.5px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-signup {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            padding: 0.5rem 1.5rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: var(--shadow-md);
+        }
+
+        .btn-login:hover {
+            background-color: rgba(114, 47, 55, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .btn-signup:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Page Header */
+        .page-header {
+            text-align: center;
+            padding: 3rem 0;
+        }
+
+        .page-title {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 1rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Membership Section */
+        .membership-section {
+            padding: 2rem 0 5rem;
+        }
+
+        .current-plan-badge {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .membership-cards {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .membership-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: var(--shadow-lg);
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .membership-card.active {
+            border-color: var(--primary);
+            transform: translateY(-10px);
+        }
+
+        .membership-card.premium {
+            background-color: var(--primary);
+            color: white;
+        }
+
+        .card-header {
+            padding: 2rem;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+        }
+
+        .premium .card-header {
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .plan-name {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+
+        .plan-description {
+            color: var(--gray);
+            margin-bottom: 0;
+        }
+
+        .premium .plan-description {
+            color: rgba(255,255,255,0.8);
+        }
+
+        .current-plan-marker {
+            display: inline-block;
+            background-color: var(--primary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .premium .current-plan-marker {
+            background-color: white;
+            color: var(--primary);
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .price {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .premium .price {
+            color: white;
+        }
+
+        .price-period {
+            font-size: 1.2rem;
+            font-weight: 400;
+            opacity: 0.7;
+        }
+
+        .benefits-list {
+            list-style: none;
+            padding: 0;
+            margin: 2rem 0;
+        }
+
+        .benefit-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 1.5rem;
+        }
+
+        .benefit-icon {
+            margin-right: 1rem;
+            font-size: 1.2rem;
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        .premium .benefit-icon {
+            color: white;
+        }
+
+        .benefit-text {
+            font-size: 1.1rem;
+        }
+
+        .btn-membership {
+            width: 100%;
+            padding: 1rem;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .btn-standard {
+            background-color: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+
+        .btn-standard:hover {
+            background-color: rgba(114, 47, 55, 0.1);
+        }
+
+        .btn-premium {
+            background-color: white;
+            color: var(--primary);
+            border: 2px solid white;
+        }
+
+        .btn-premium:hover {
+            background-color: transparent;
+            color: white;
+        }
+
+        .btn-disabled {
+            background-color: var(--gray);
+            color: white;
+            border: 2px solid var(--gray);
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        /* Success Modal */
+        .success-modal .modal-content {
+            border-radius: 20px;
+            border: none;
+            overflow: hidden;
+        }
+
+        .success-icon-container {
+            position: relative;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto;
+        }
+
+        .success-icon {
+            width: 100%;
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 3rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(114, 47, 55, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 20px rgba(114, 47, 55, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(114, 47, 55, 0);
+            }
+        }
+
+        .success-title {
+            color: var(--primary);
+            font-weight: 700;
+        }
+
+        /* Toast Notification */
+        .toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1050;
+        }
+
+        .custom-toast {
+            background-color: white;
+            box-shadow: var(--shadow-lg);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            border-left: 4px solid var(--primary);
+            max-width: 350px;
+        }
+
+        .toast-header {
+            background-color: rgba(0, 0, 0, 0.02);
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .toast-body {
+            padding: 1rem;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .membership-cards {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .membership-card {
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+
+            .current-plan-badge {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+
+            .plan-name {
+                font-size: 1.75rem;
+            }
+
+            .price {
+                font-size: 2.5rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .card-header, .card-body {
+                padding: 1.5rem;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .benefit-item {
+                margin-bottom: 1rem;
+            }
+
+            .benefit-text {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container">
+        <a class="navbar-brand" th:href="@{/}">ALBANY</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/}">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/customer/aboutUs}">About Us</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/services}">Services</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active" th:href="@{/customer/membership}">Membership</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" th:href="@{/contact}">Contact Us</a>
+                </li>
+            </ul>
+
+            <!-- User Profile Dropdown (if logged in) or Login/Signup Buttons (if not logged in) -->
+            <div id="authButtons" class="ms-lg-3 mt-3 mt-lg-0 d-flex">
+                <!-- This will be populated by JavaScript -->
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Page Content -->
+<div class="container" style="margin-top: 100px;">
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1 class="page-title">Select Your Plan</h1>
+        <p class="page-subtitle">Our membership plans are designed to give you the best service experience for your vehicle</p>
+    </div>
+
+    <!-- Display current plan badge -->
+    <div class="text-center" id="currentPlanBadge" style="display: none;">
+        <div class="current-plan-badge">
+            <i class="bi bi-check-circle-fill me-2"></i>
+            Current Plan: <span id="currentPlanText">STANDARD</span>
+        </div>
+    </div>
+
+    <!-- Membership Section -->
+    <section class="membership-section">
+        <div class="membership-cards">
+            <!-- Standard Plan Card -->
+            <div class="membership-card" id="standardCard">
+                <div class="card-header">
+                    <div class="current-plan-marker" id="standardMarker" style="display: none;">
+                        <i class="bi bi-check-circle-fill me-1"></i> Current Plan
+                    </div>
+                    <h2 class="plan-name">STANDARD</h2>
+                    <p class="plan-description">Basic membership for all customers</p>
+                </div>
+                <div class="card-body">
+                    <div class="price">
+                        Free <span class="price-period">forever</span>
+                    </div>
+                    <ul class="benefits-list">
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Basic service booking</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Regular service rates</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Standard customer support</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Vehicle service history</span>
+                        </li>
+                    </ul>
+                    <button class="btn btn-membership btn-standard" id="standardButton">
+                        Standard Plan
+                    </button>
+                </div>
+            </div>
+
+            <!-- Premium Plan Card -->
+            <div class="membership-card premium" id="premiumCard">
+                <div class="card-header">
+                    <div class="current-plan-marker" id="premiumMarker" style="display: none;">
+                        <i class="bi bi-check-circle-fill me-1"></i> Current Plan
+                    </div>
+                    <h2 class="plan-name">PREMIUM</h2>
+                    <p class="plan-description">Enhanced benefits for frequent customers</p>
+                </div>
+                <div class="card-body">
+                    <div class="price">
+                        ₹1,200 <span class="price-period">for 2 years</span>
+                    </div>
+                    <ul class="benefits-list">
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">30% discount on all labor charges</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Priority service during peak hours</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Premium customer support</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Exclusive seasonal offers</span>
+                        </li>
+                        <li class="benefit-item">
+                            <span class="benefit-icon"><i class="bi bi-check-circle-fill"></i></span>
+                            <span class="benefit-text">Free basic vehicle inspection (twice a year)</span>
+                        </li>
+                    </ul>
+
+                    <button id="premiumButton" class="btn btn-membership btn-premium">
+                        Upgrade Now
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- Success Modal -->
+<div class="modal fade success-modal" id="successModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center p-5">
+                <div class="success-icon-container mb-4">
+                    <div class="success-icon">
+                        <i class="bi bi-check-lg"></i>
+                    </div>
+                </div>
+                <h3 class="success-title mb-3">Membership Upgraded!</h3>
+                <p class="mb-4">Congratulations! Your membership has been successfully upgraded to Premium. Enjoy all the exclusive benefits!</p>
+                <button type="button" class="btn btn-primary btn-lg" data-bs-dismiss="modal">
+                    <i class="bi bi-check-circle me-2"></i>Continue
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notifications Container -->
+<div class="toast-container"></div>
+
+<!-- Hidden form for payment submission -->
+<form id="paymentForm" method="post" th:action="@{/customer/membership/verify-payment}" style="display:none;">
+    <input type="hidden" name="paymentId" id="paymentId">
+    <input type="hidden" name="razorpayOrderId" id="razorpayOrderId">
+</form>
+
+<!-- Hidden user data from server -->
+<div id="userData"
+     th:data-is-premium="${isPremium}"
+     th:data-auth-token="${session.authToken}"
+     th:data-user-name="${user != null ? user.firstName : ''}"
+     th:data-user-email="${user != null ? user.email : ''}"
+     style="display:none;">
+</div>
+
+<!-- Razorpay data (if available) -->
+<div id="razorpayData"
+     th:data-key="${razorpayKey}"
+     th:data-order-id="${orderId}"
+     th:data-amount="${amount}"
+     th:data-currency="${currency}"
+     th:data-name="${userName}"
+     th:data-email="${userEmail}"
+     th:data-phone="${userPhone}"
+     style="display:none;">
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get user data from both server-side and client-side
+        const userData = document.getElementById('userData');
+        const serverIsPremium = userData && userData.dataset.isPremium === 'true';
+        const serverAuthToken = userData && userData.dataset.authToken;
+
+        // Get client-side data from session storage
+        const clientAuthToken = sessionStorage.getItem('authToken');
+        const userInfoStr = sessionStorage.getItem('userInfo');
+        let userInfo = null;
+        let clientIsPremium = false;
+
+        if (userInfoStr) {
+            try {
+                userInfo = JSON.parse(userInfoStr);
+                clientIsPremium = userInfo.membershipType === 'PREMIUM';
+            } catch (e) {
+                console.error('Error parsing user info:', e);
+            }
+        }
+
+        // Determine if user is authenticated and premium
+        const isAuthenticated = serverAuthToken || clientAuthToken;
+        const isPremium = serverIsPremium || clientIsPremium;
+
+        console.log("Auth status - Server token:", !!serverAuthToken, "Client token:", !!clientAuthToken);
+        console.log("Premium status - Server:", serverIsPremium, "Client:", clientIsPremium);
+
+        // Update UI based on authentication and premium status
+        updateAuthUI(isAuthenticated, isPremium, userInfo);
+        updateMembershipUI(isPremium);
+
+        // Show success modal if URL parameter indicates
+        const urlParams = new URLSearchParams(window.location.search);
+        const showSuccess = urlParams.get('showSuccess') === 'true';
+        if (showSuccess) {
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+        }
+
+        // Show any success/error messages from URL parameters
+        const successMessage = urlParams.get('success');
+        const errorMessage = urlParams.get('error');
+
+        if (successMessage) {
+            showToast('Success', successMessage, 'success');
+            // Remove query parameters
+            history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        if (errorMessage) {
+            showToast('Error', errorMessage, 'error');
+            // Remove query parameters
+            history.replaceState({}, document.title, window.location.pathname);
+        }
+
+        // Set up event listeners
+        setupEventListeners(isAuthenticated);
+
+        // Initialize Razorpay if data is available
+        initRazorpay();
+    });
+
+    // Update authentication UI
+    function updateAuthUI(isAuthenticated, isPremium, userInfo) {
+        const authButtonsContainer = document.getElementById('authButtons');
+
+        if (isAuthenticated) {
+            // User is logged in - show profile dropdown
+            const userName = userInfo ? userInfo.firstName : document.getElementById('userData').dataset.userName;
+
+            authButtonsContainer.innerHTML = `
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-person-circle me-1"></i>
+                            <span>${userName || 'User'}</span>
+                            ${isPremium ? '<span class="badge badge-premium">PREMIUM</span>' : ''}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="/customer/profile">My Profile</a></li>
+                            <li><a class="dropdown-item" href="/customer/myVehicles">My Vehicles</a></li>
+                            <li><a class="dropdown-item" href="/customer/serviceHistory">Service History</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="#" id="logoutBtn">Logout</a></li>
+                        </ul>
+                    </div>
+                `;
+
+            // Add logout functionality
+            document.getElementById('logoutBtn').addEventListener('click', function(e) {
+                e.preventDefault();
+                logout();
+            });
+        } else {
+            // User is not logged in - show login/signup buttons
+            authButtonsContainer.innerHTML = `
+                    <a href="/authentication/login" class="btn btn-login me-2">Login</a>
+                    <a href="/authentication/login" class="btn btn-signup">Signup</a>
+                `;
+        }
+    }
+
+    // Update membership UI based on premium status
+    function updateMembershipUI(isPremium) {
+        // Show current plan badge
+        const currentPlanBadge = document.getElementById('currentPlanBadge');
+        const currentPlanText = document.getElementById('currentPlanText');
+
+        currentPlanBadge.style.display = 'block';
+        currentPlanText.textContent = isPremium ? 'PREMIUM' : 'STANDARD';
+
+        // Update standard plan card
+        const standardCard = document.getElementById('standardCard');
+        const standardMarker = document.getElementById('standardMarker');
+        const standardButton = document.getElementById('standardButton');
+
+        // Update premium plan card
+        const premiumCard = document.getElementById('premiumCard');
+        const premiumMarker = document.getElementById('premiumMarker');
+        const premiumButton = document.getElementById('premiumButton');
+
+        if (isPremium) {
+            // User has premium - highlight premium card
+            standardCard.classList.remove('active');
+            premiumCard.classList.add('active');
+
+            // Only show current plan marker on Premium
+            standardMarker.style.display = 'none';
+            premiumMarker.style.display = 'block';
+
+            // Update buttons
+            standardButton.className = 'btn btn-membership btn-standard';
+            standardButton.disabled = false;
+            standardButton.textContent = 'Standard Plan';
+
+            premiumButton.className = 'btn btn-membership btn-premium btn-disabled';
+            premiumButton.disabled = true;
+            premiumButton.textContent = 'Current Plan';
+        } else {
+            // User has standard - highlight standard card
+            standardCard.classList.add('active');
+            premiumCard.classList.remove('active');
+
+            // Only show current plan marker on Standard
+            standardMarker.style.display = 'block';
+            premiumMarker.style.display = 'none';
+
+            // Update buttons
+            standardButton.className = 'btn btn-membership btn-standard btn-disabled';
+            standardButton.disabled = true;
+            standardButton.textContent = 'Current Plan';
+
+            premiumButton.className = 'btn btn-membership btn-premium';
+            premiumButton.disabled = false;
+            premiumButton.textContent = 'Upgrade Now';
+        }
+    }
+
+    // Set up event listeners
+    function setupEventListeners(isAuthenticated) {
+        // Set up premium button
+        const premiumButton = document.getElementById('premiumButton');
+        if (premiumButton) {
+            premiumButton.addEventListener('click', function() {
+                if (this.disabled) return;
+
+                if (!isAuthenticated) {
+                    // Redirect to login if not authenticated
+                    window.location.href = '/authentication/login?message=' +
+                        encodeURIComponent('Please login to upgrade your membership') +
+                        '&type=info&redirect=/customer/membership';
+                } else {
+                    // Initiate upgrade process for authenticated users
+                    initiateUpgrade();
+                }
+            });
+        }
+
+        // Standard button should do nothing when premium
+        const standardButton = document.getElementById('standardButton');
+        if (standardButton) {
+            standardButton.addEventListener('click', function() {
+                if (this.disabled) return;
+
+                // If user is premium and clicks on standard
+                showToast('Info', 'You already have a Premium membership. Downgrading is not supported.', 'info');
+            });
+        }
+    }
+
+    // Initiate upgrade process
+    function initiateUpgrade() {
+        // Show loading state
+        const premiumButton = document.getElementById('premiumButton');
+        const originalText = premiumButton.innerHTML;
+        premiumButton.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Processing...';
+        premiumButton.disabled = true;
+
+        // Get token from session storage
+        const authToken = sessionStorage.getItem('authToken');
+
+        // Initiate payment by making a POST request
+        fetch('/customer/membership/initiate-payment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': authToken ? `Bearer ${authToken}` : ''
+            }
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.text();
+            })
+            .then(html => {
+                // Replace current page with the response which will have the Razorpay data
+                document.open();
+                document.write(html);
+                document.close();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                showToast('Error', 'Failed to initiate payment. Please try again.', 'error');
+
+                // Reset button state
+                premiumButton.innerHTML = originalText;
+                premiumButton.disabled = false;
+            });
+    }
+
+    // Initialize Razorpay if data is available
+    function initRazorpay() {
+        const razorpayData = document.getElementById('razorpayData');
+        if (!razorpayData || !razorpayData.dataset.key || !razorpayData.dataset.orderId) {
+            return;
+        }
+
+        const options = {
+            key: razorpayData.dataset.key,
+            amount: razorpayData.dataset.amount,
+            currency: razorpayData.dataset.currency,
+            name: "Albany Vehicle Service",
+            description: "Premium Membership Upgrade",
+            image: "/assets/logo.png",
+            order_id: razorpayData.dataset.orderId,
+            handler: function (response) {
+                // On successful payment, submit the form with payment details
+                document.getElementById('paymentId').value = response.razorpay_payment_id;
+                document.getElementById('razorpayOrderId').value = response.razorpay_order_id;
+                document.getElementById('paymentForm').submit();
+            },
+            prefill: {
+                name: razorpayData.dataset.name,
+                email: razorpayData.dataset.email,
+                contact: razorpayData.dataset.phone
+            },
+            theme: {
+                color: "#722F37"
+            },
+            modal: {
+                ondismiss: function() {
+                    showToast('Info', 'Payment cancelled. You can try again later.', 'info');
+                    // Reset button state
+                    const premiumButton = document.getElementById('premiumButton');
+                    premiumButton.innerHTML = 'Upgrade Now';
+                    premiumButton.disabled = false;
+                }
+            }
+        };
+
+        const razorpay = new Razorpay(options);
+        razorpay.open();
+    }
+
+    // Logout function
+    function logout() {
+        // Clear session storage
+        sessionStorage.removeItem('authToken');
+        sessionStorage.removeItem('userInfo');
+
+        // Show success message
+        showToast('Success', 'You have been logged out successfully', 'success');
+
+        // Redirect to home page after a short delay
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 1000);
+    }
+
+    // Show toast notification
+    function showToast(title, message, type = 'info') {
+        const toastContainer = document.querySelector('.toast-container');
+
+        const toastId = 'toast-' + Date.now();
+
+        // Determine border color based on type
+        let borderColor = '#3b82f6'; // info (blue)
+        if (type === 'success') borderColor = '#10b981'; // success (green)
+        if (type === 'error') borderColor = '#ef4444'; // error (red)
+        if (type === 'warning') borderColor = '#f59e0b'; // warning (amber)
+
+        const toastHtml = `
+                <div id="${toastId}" class="custom-toast" style="border-left-color: ${borderColor}">
+                    <div class="toast-header">
+                        <strong>${title}</strong>
+                        <button type="button" class="btn-close" aria-label="Close"></button>
+                    </div>
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                </div>
+            `;
+
+        toastContainer.insertAdjacentHTML('beforeend', toastHtml);
+
+        // Get the newly created toast element
+        const toastElement = document.getElementById(toastId);
+
+        // Add close button functionality
+        const closeButton = toastElement.querySelector('.btn-close');
+        closeButton.addEventListener('click', function() {
+            toastElement.remove();
+        });
+
+        // Auto remove after 5 seconds
+        setTimeout(function() {
+            if (toastElement && toastElement.parentNode) {
+                toastElement.remove();
+            }
+        }, 5000);
+    }
+</script>
+</body>
+</html>

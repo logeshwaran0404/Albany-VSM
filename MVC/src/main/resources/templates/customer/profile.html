@@ -1,0 +1,4166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Albany - User Profile</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Russo+One&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #722F37;
+            --primary-dark: #5a252c;
+            --secondary: #EFFBBB;
+            --dark: #2c1518;
+            --light: #f8fff0;
+            --gray: #64748b;
+            --gradient-primary: linear-gradient(135deg, #722F37 0%, #8a3a44 100%);
+            --gradient-secondary: linear-gradient(135deg, rgba(114, 47, 55, 0.1) 0%, rgba(239, 251, 187, 0.1) 100%);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.1);
+            --white: #ffffff;
+            --light-gray: #f1f5f9;
+            --medium-gray: #e2e8f0;
+            --dark-gray: #475569;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --error: #ef4444;
+        }
+
+        body {
+            font-family: 'Urbanist', sans-serif;
+            color: var(--dark);
+            background-color: var(--light);
+            overflow-x: hidden;
+            margin: 0;
+            padding: 0;
+            line-height: 1.6;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: var(--white);
+            box-shadow: var(--shadow-md);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            font-family: 'Russo One', sans-serif;
+            font-size: 1.8rem;
+            color: var(--primary);
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark-gray);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .page-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 2rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .page-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .profile-sidebar {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            padding: 2rem;
+            height: fit-content;
+        }
+
+        .profile-avatar {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .avatar-wrapper {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            border: 4px solid var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .avatar-wrapper img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .change-avatar {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: var(--white);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .change-avatar:hover {
+            background-color: var(--primary-dark);
+            transform: scale(1.1);
+        }
+
+        .profile-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .membership-status {
+            font-size: 0.9rem;
+            color: var(--gray);
+            background-color: rgba(239, 251, 187, 0.5);
+            padding: 0.25rem 1rem;
+            border-radius: 20px;
+            font-weight: 500;
+        }
+
+        .membership-premium {
+            background-color: rgba(245, 158, 11, 0.2);
+            color: #92400e;
+        }
+
+        .profile-menu {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            text-decoration: none;
+            color: var(--dark-gray);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+            font-size: 1.1rem;
+        }
+
+        .menu-item:hover {
+            background-color: rgba(114, 47, 55, 0.05);
+            color: var(--primary);
+            transform: translateX(5px);
+        }
+
+        .menu-item.active {
+            background-color: var(--primary);
+            color: var(--white);
+            font-weight: 600;
+        }
+
+        .profile-content {
+            background-color: var(--white);
+            border-radius: 12px;
+            box-shadow: var(--shadow-lg);
+            overflow: hidden;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .content-header {
+            background: var(--gradient-primary);
+            color: var(--white);
+            padding: 1.5rem 2rem;
+            font-size: 1.3rem;
+            font-weight: 600;
+        }
+
+        .content-body {
+            padding: 2rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .section-title:first-child {
+            margin-top: 0;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark-gray);
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(114, 47, 55, 0.1);
+        }
+
+        .form-control:disabled {
+            background-color: var(--light-gray);
+            cursor: not-allowed;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+
+        .btn-sm {
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: var(--white);
+        }
+
+        .btn-primary:hover {
+            box-shadow: var(--shadow-md);
+            transform: translateY(-2px);
+        }
+
+        .btn-outline {
+            background-color: transparent;
+            border: 1px solid currentColor;
+            color: var(--primary);
+        }
+
+        .btn-outline:hover {
+            background-color: rgba(114, 47, 56, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .alert-info {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: #1e40af;
+            border-left: 4px solid #3b82f6;
+        }
+
+        .service-status {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .status-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .status-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .vehicle-actions {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            justify-content: flex-end;
+        }
+
+        .btn-danger {
+            color: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background-color: rgba(220, 53, 69, 0.1);
+        }
+
+        .service-detail-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin: 1.5rem 0 1rem;
+            border-bottom: 1px solid var(--medium-gray);
+            padding-bottom: 0.5rem;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .detail-label {
+            color: var(--dark-gray);
+            font-size: 0.9rem;
+        }
+
+        .detail-value {
+            font-weight: 600;
+        }
+
+        .materials-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .materials-table th, .materials-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .materials-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+        }
+
+        .materials-table th:last-child, .materials-table td:last-child {
+            text-align: right;
+        }
+
+        .charges-summary {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .charge-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .charge-row:last-child {
+            border-bottom: none;
+        }
+
+        .charge-row.discount {
+            color: #28a745;
+        }
+
+        .charge-row.total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--primary);
+        }
+
+        .empty-message {
+            padding: 1rem;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            color: var(--dark-gray);
+            text-align: center;
+        }
+
+        .invoice-section {
+            margin-bottom: 2rem;
+        }
+
+        .invoice-section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 1rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .invoice-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .invoice-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .invoice-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .invoice-card.pending .invoice-header {
+            background-color: #f59e0b;
+        }
+
+        .invoice-card.paid .invoice-header {
+            background-color: #10b981;
+        }
+
+        .invoice-header {
+            padding: 1rem;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .invoice-title {
+            font-weight: 600;
+        }
+
+        .invoice-status {
+            font-size: 0.8rem;
+            font-weight: 600;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .invoice-body {
+            padding: 1.25rem;
+        }
+
+        .invoice-detail {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .invoice-detail:last-child {
+            margin-bottom: 1.25rem;
+        }
+
+        .invoice-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .invoice-detail-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 2rem;
+        }
+
+        .company-info h3, .invoice-info h4 {
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .company-info p, .invoice-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .customer-vehicle-info {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            background-color: var(--light-gray);
+            padding: 1.25rem;
+            border-radius: 8px;
+        }
+
+        .customer-info h4, .vehicle-info h4 {
+            margin-bottom: 0.75rem;
+            color: var(--dark-gray);
+        }
+
+        .customer-info p, .vehicle-info p {
+            margin: 0.25rem 0;
+            font-size: 0.9rem;
+        }
+
+        .invoice-items h4 {
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        .invoice-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 1.5rem;
+        }
+
+        .invoice-table th, .invoice-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .invoice-table th {
+            background-color: var(--light-gray);
+            font-weight: 600;
+        }
+
+        .invoice-table th:last-child, .invoice-table td:last-child {
+            text-align: right;
+        }
+
+        .discount-row {
+            color: #28a745;
+        }
+
+        .invoice-summary {
+            width: 300px;
+            margin-left: auto;
+            margin-bottom: 2rem;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.5rem 0;
+        }
+
+        .summary-row.total {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid var(--primary);
+        }
+
+        .invoice-notes {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+            font-style: italic;
+        }
+
+        .vehicle-status {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vehicle-card {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .vehicle-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .vehicle-header {
+            padding: 1.25rem;
+            background: var(--gradient-primary);
+            color: var(--white);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .vehicle-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .in-progress {
+            background-color: var(--warning);
+            color: var(--dark);
+        }
+
+        .completed {
+            background-color: var(--success);
+            color: var(--white);
+        }
+
+        .received {
+            background-color: var(--info);
+            color: var(--white);
+        }
+
+        .diagnosis {
+            background-color: #8b5cf6;
+            color: var(--white);
+        }
+
+        .repair {
+            background-color: #ec4899;
+            color: var(--white);
+        }
+
+        .vehicle-details {
+            padding: 1.25rem;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 1rem;
+        }
+
+        .detail-label {
+            color: var(--dark-gray);
+            font-weight: 500;
+        }
+
+        .detail-value {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .progress-steps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            padding: 1.25rem 0;
+            margin-top: 0.5rem;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+
+        .step::after {
+            content: '';
+            position: absolute;
+            top: 15px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background-color: var(--medium-gray);
+            z-index: 1;
+        }
+
+        .step:last-child::after {
+            display: none;
+        }
+
+        .step-icon {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: var(--medium-gray);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--white);
+            position: relative;
+            z-index: 2;
+        }
+
+        .step.completed .step-icon {
+            background-color: var(--success);
+        }
+
+        .step.current .step-icon {
+            background-color: var(--warning);
+        }
+
+        .step-label {
+            font-size: 0.8rem;
+            text-align: center;
+            color: var(--dark-gray);
+        }
+
+        .step.completed .step-label,
+        .step.current .step-label {
+            font-weight: 600;
+            color: var(--dark);
+        }
+
+        .history-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .history-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .history-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-3px);
+        }
+
+        .history-header {
+            background-color: var(--light-gray);
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .history-body {
+            padding: 1.25rem;
+        }
+
+        .service-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.25rem;
+        }
+
+        .service-list {
+            margin-top: 1.25rem;
+            border-top: 1px solid var(--medium-gray);
+            padding-top: 1rem;
+        }
+
+        .service-list-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--medium-gray);
+            font-size: 1rem;
+        }
+
+        .service-list-item:last-child {
+            border-bottom: none;
+        }
+
+        .action-buttons {
+            display: flex;
+            justify-content: flex-end;
+            gap: 0.75rem;
+            margin-top: 1.25rem;
+        }
+
+        .vehicles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .vehicle-item {
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all 0.3s ease;
+            background-color: var(--white);
+        }
+
+        .vehicle-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .vehicle-image {
+            height: 180px;
+            overflow: hidden;
+            background-color: var(--primary);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-size: 3rem;
+        }
+
+        .vehicle-image i {
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .vehicle-info {
+            padding: 1.25rem;
+        }
+
+        .vehicle-info h4 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .add-vehicle-card {
+            border: 2px dashed var(--medium-gray);
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2.5rem;
+            gap: 1.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            height: 100%;
+            background-color: var(--white);
+        }
+
+        .add-vehicle-card:hover {
+            border-color: var(--primary);
+            background-color: rgba(114, 47, 56, 0.05);
+            transform: translateY(-5px);
+        }
+
+        .add-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            color: var(--white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.75rem;
+            box-shadow: var(--shadow-md);
+        }
+
+        .invoice-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .invoice-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background-color: var(--white);
+            box-shadow: var(--shadow-md);
+        }
+
+        .invoice-item:hover {
+            background-color: var(--light-gray);
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .invoice-details {
+            display: flex;
+            flex-direction: column;
+            gap: 0.35rem;
+        }
+
+        .invoice-id {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        .invoice-date, .invoice-amount {
+            font-size: 0.9rem;
+            color: var(--dark-gray);
+        }
+
+        .invoice-actions {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .icon-button {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .icon-button:hover {
+            background-color: var(--primary);
+            color: var(--white);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-overlay.active {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        .modal-container {
+            background-color: var(--white);
+            border-radius: 15px;
+            width: min(90%, 500px);
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: var(--shadow-xl);
+            transform: translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            padding: 1.25rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+
+        .modal-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            transition: all 0.2s ease;
+        }
+
+        .modal-close:hover {
+            color: var(--primary);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .modal-footer {
+            border-top: 1px solid #e9ecef;
+            padding: 1rem 1.5rem;
+            justify-content: flex-end;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .loading-spinner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            color: var(--primary);
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(114, 47, 55, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 1s ease-in-out infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--dark-gray);
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: var(--medium-gray);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 9999;
+        }
+
+        .toast {
+            background-color: var(--white);
+            border-radius: 8px;
+            box-shadow: var(--shadow-lg);
+            padding: 0;
+            margin-bottom: 1rem;
+            min-width: 280px;
+            max-width: 350px;
+            overflow: hidden;
+            animation: toast-in-right 0.3s ease forwards;
+            opacity: 0;
+            transform: translateX(100%);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast.success .toast-header {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border-left: 4px solid var(--success);
+        }
+
+        .toast.error .toast-header {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--error);
+            border-left: 4px solid var(--error);
+        }
+
+        .toast.info .toast-header {
+            background-color: rgba(59, 130, 246, 0.1);
+            color: var(--info);
+            border-left: 4px solid var(--info);
+        }
+
+        .toast-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0.75rem 1rem;
+        }
+
+        .toast-body {
+            padding: 0.75rem 1rem;
+            color: var(--dark-gray);
+        }
+
+        .toast-close {
+            background: none;
+            border: none;
+            font-size: 1.25rem;
+            cursor: pointer;
+            color: var(--dark-gray);
+            opacity: 0.7;
+            transition: all 0.2s ease;
+        }
+
+        .toast-close:hover {
+            opacity: 1;
+        }
+
+        @keyframes toast-in-right {
+            from { opacity: 0; transform: translateX(100%); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: var(--dark);
+            color: var(--white);
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--dark) transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
+
+        @media (max-width: 1200px) {
+            .profile-grid {
+                grid-template-columns: minmax(250px, 300px) 1fr;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .profile-sidebar {
+                padding: 1.5rem;
+            }
+
+            .profile-menu {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 0.5rem;
+            }
+
+            .menu-item {
+                padding: 0.75rem;
+                flex: 1;
+                text-align: center;
+            }
+
+            .form-row {
+                grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 1.5rem;
+            }
+
+            .header {
+                flex-direction: column;
+                padding: 1rem;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                width: 100%;
+                justify-content: space-around;
+                flex-wrap: wrap;
+            }
+
+            .nav-links a {
+                padding: 0.5rem;
+            }
+
+            .page-title {
+                font-size: 1.75rem;
+            }
+
+            .avatar-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+
+            .progress-steps {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 1rem;
+            }
+
+            .step::after {
+                display: none;
+            }
+
+            .vehicles-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .invoice-detail-header, .customer-vehicle-info {
+                flex-direction: column;
+                grid-template-columns: 1fr;
+            }
+
+            .company-info, .customer-info {
+                margin-bottom: 1.5rem;
+            }
+
+            .invoice-summary {
+                width: 100%;
+            }
+
+            .invoice-list {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .nav-links a span {
+                display: none;
+            }
+
+            .nav-links a {
+                width: 40px;
+                height: 40px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .profile-menu {
+                gap: 0.25rem;
+            }
+
+            .menu-item {
+                padding: 0.5rem;
+                flex: 0 0 auto;
+            }
+
+            .menu-item span {
+                display: none;
+            }
+
+            .menu-item i {
+                width: auto;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .progress-steps {
+                grid-template-columns: 1fr;
+            }
+
+            .vehicle-status {
+                grid-template-columns: 1fr;
+            }
+
+            .service-details {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-container {
+                width: 95%;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .profile-menu {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .menu-item {
+                width: 100%;
+                justify-content: center;
+            }
+
+            .invoice-item {
+                flex-direction: column;
+                gap: 1rem;
+                align-items: flex-start;
+            }
+
+            .invoice-actions {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="header">
+    <a href="/" class="logo">Albany</a>
+    <div class="nav-links">
+        <a href="/" class="tooltip"><i class="fas fa-home"></i><span class="tooltiptext">Home</span><span>Home</span></a>
+        <a href="/services" class="tooltip"><i class="fas fa-car"></i><span class="tooltiptext">Services</span><span>Services</span></a>
+        <a href="/about" class="tooltip"><i class="fas fa-info-circle"></i><span class="tooltiptext">About</span><span>About</span></a>
+        <a href="/contact" class="tooltip"><i class="fas fa-phone"></i><span class="tooltiptext">Contact</span><span>Contact</span></a>
+        <a href="/customer/profile" class="tooltip"><i class="fas fa-user"></i><span class="tooltiptext">Profile</span><span>Profile</span></a>
+    </div>
+</div>
+
+<div class="container">
+    <h1 class="page-title">Your Profile</h1>
+
+    <div class="profile-grid">
+        <div class="profile-sidebar">
+            <div class="profile-avatar">
+                <div id="profileAvatarWrapper" class="avatar-wrapper">
+                    <img src="" alt="User Avatar" id="profileAvatar">
+                    <div class="change-avatar" id="changeAvatarBtn">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </div>
+                <div class="profile-name" id="profileName">Loading...</div>
+                <div class="membership-status" id="membershipStatus">...</div>
+            </div>
+
+            <div class="profile-menu">
+                <div class="menu-item active" data-tab="profile">
+                    <i class="fas fa-user"></i>
+                    <span>Profile Information</span>
+                </div>
+                <div class="menu-item" data-tab="services">
+                    <i class="fas fa-car"></i>
+                    <span>Current Services</span>
+                </div>
+                <div class="menu-item" data-tab="history">
+                    <i class="fas fa-history"></i>
+                    <span>Service History</span>
+                </div>
+                <div class="menu-item" id="logoutBtn">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="profile-content">
+            <div class="tab-content active" id="profile-tab">
+                <div class="content-header">
+                    <span>Profile Information</span>
+                </div>
+                <div class="content-body">
+                    <h3 class="section-title">Personal Information</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="firstName" name="firstName">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="lastName" name="lastName">
+                        </div>
+                    </div>
+
+                    <h3 class="section-title">Contact Information</h3>
+                    <div class="form-group">
+                        <label class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+
+                    <div class="section-title">Phone Number</div>
+                    <div class="form-group">
+                        <label class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phoneNumber" name="phoneNumber">
+                    </div>
+
+                    <h3 class="section-title">Address Information</h3>
+                    <div class="form-group">
+                        <label class="form-label">Street Address</label>
+                        <input type="text" class="form-control" id="street" name="street">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label class="form-label">City</label>
+                            <input type="text" class="form-control" id="city" name="city">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">State</label>
+                            <input type="text" class="form-control" id="state" name="state">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">ZIP Code</label>
+                            <input type="text" class="form-control" id="postalCode" name="postalCode">
+                        </div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 2rem;">
+                        <button class="btn btn-primary" id="saveProfileBtn">Save Changes</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="services-tab">
+                <div class="content-header">
+                    <span>Current Services</span>
+                </div>
+                <div class="content-body">
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> Track your vehicle's service status in real-time
+                    </div>
+
+                    <div class="service-status">
+                        <div class="status-header">
+                            <div class="status-title">Your Vehicles in Service</div>
+                        </div>
+
+                        <div class="vehicle-status" id="currentServicesContainer">
+                            <div class="loading-spinner">
+                                <div class="spinner"></div>
+                                <p>Loading your active services...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="history-tab">
+                <div class="content-header">
+                    <span>Service History</span>
+                </div>
+                <div class="content-body">
+                    <div class="history-list" id="serviceHistoryContainer">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p>Loading your service history...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="invoices-tab">
+                <div class="content-header">
+                    <span>Invoices</span>
+                </div>
+                <div class="content-body">
+                    <div class="invoice-list" id="invoicesContainer">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p>Loading your invoices...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-content" id="vehicles-tab">
+                <div class="content-header">
+                    <span>Your Vehicles</span>
+                </div>
+                <div class="content-body">
+                    <div class="vehicles-grid" id="vehiclesContainer">
+                        <div class="loading-spinner">
+                            <div class="spinner"></div>
+                            <p>Loading your vehicles...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="toast-container"></div>
+
+<script>
+    class ProfileManager {
+        constructor() {
+            this.userData = null;
+            this.vehicles = [];
+            this.activeServices = [];
+            this.serviceHistory = [];
+            this.invoices = [];
+
+            this.apiEndpoints = {
+                profile: '/customer/api/profile',
+                updateProfile: '/customer/api/profile/update',
+                vehicles: '/customer/api/vehicles',
+                addVehicle: '/customer/api/vehicles/add',
+                updateVehicle: '/customer/api/vehicles/update', // Fixed path
+                deleteVehicle: '/customer/api/vehicles/delete', // Fixed path
+                activeServices: '/customer/api/services/active',
+                serviceHistory: '/customer/api/service-history',
+                serviceDetails: '/customer/api/service-history/',
+                serviceTracking: '/customer/api/services/',
+                invoices: '/customer/api/invoices',
+                createPayment: '/customer/api/invoices/{id}/payment',
+                verifyPayment: '/customer/api/invoices/verify-payment'
+            };
+
+            this.currentTab = 'profile';
+            this.pdfGenerator = new PDFGenerator();
+
+            this.initEventListeners();
+            this.loadUserProfile();
+            this.setRandomAvatar();
+        }
+
+        initEventListeners() {
+            document.querySelectorAll('.menu-item').forEach(item => {
+                if (item.id !== 'logoutBtn') {
+                    item.addEventListener('click', () => this.switchTab(item.dataset.tab));
+                }
+            });
+
+            document.getElementById('logoutBtn').addEventListener('click', () => this.logout());
+            document.getElementById('saveProfileBtn').addEventListener('click', () => this.saveProfileChanges());
+            document.getElementById('changeAvatarBtn').addEventListener('click', () => this.setRandomAvatar());
+
+            window.addEventListener('click', (e) => {
+                if (e.target.classList.contains('modal-overlay')) {
+                    this.closeAllModals();
+                }
+            });
+
+            document.querySelectorAll('.modal-close, .modal-cancel').forEach(btn => {
+                btn.addEventListener('click', () => this.closeAllModals());
+            });
+        }
+
+        closeAllModals() {
+            document.querySelectorAll('.modal-overlay').forEach(modal => {
+                modal.classList.remove('active');
+            });
+        }
+
+        switchTab(tabName) {
+            if (!tabName || tabName === this.currentTab) return;
+
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            document.querySelector(`.menu-item[data-tab="${tabName}"]`).classList.add('active');
+
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            document.getElementById(`${tabName}-tab`).classList.add('active');
+
+            this.currentTab = tabName;
+
+            switch(tabName) {
+                case 'vehicles':
+                    this.loadVehicles();
+                    break;
+                case 'services':
+                    this.loadActiveServices();
+                    break;
+                case 'history':
+                    this.loadServiceHistory();
+                    break;
+                case 'invoices':
+                    this.loadInvoices();
+                    break;
+            }
+        }
+
+        loadUserProfile() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                window.location.href = '/authentication/login?message=Please login to view your profile&type=info&redirect=/customer/profile';
+                return;
+            }
+
+            fetch(this.apiEndpoints.profile, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load profile data');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.userData = data;
+                    this.updateProfileUI();
+                })
+                .catch(error => {
+                    console.error('Error loading profile:', error);
+                    this.showToast('Failed to load profile data. Please try again.', 'error');
+                });
+        }
+
+        updateProfileUI() {
+            if (!this.userData) return;
+
+            document.getElementById('profileName').textContent = `${this.userData.firstName || ''} ${this.userData.lastName || ''}`.trim();
+
+            const membershipStatus = document.getElementById('membershipStatus');
+            if (this.userData.membershipType === 'PREMIUM') {
+                membershipStatus.textContent = 'Premium Member';
+                membershipStatus.classList.add('membership-premium');
+            } else {
+                membershipStatus.textContent = 'Standard Member';
+                membershipStatus.classList.remove('membership-premium');
+            }
+
+            document.getElementById('firstName').value = this.userData.firstName || '';
+            document.getElementById('lastName').value = this.userData.lastName || '';
+            document.getElementById('email').value = this.userData.email || '';
+            document.getElementById('phoneNumber').value = this.userData.phoneNumber || '';
+            document.getElementById('street').value = this.userData.street || '';
+            document.getElementById('city').value = this.userData.city || '';
+            document.getElementById('state').value = this.userData.state || '';
+            document.getElementById('postalCode').value = this.userData.postalCode || '';
+        }
+
+        // Enhanced saveProfileChanges method to properly handle all form fields
+        saveProfileChanges() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            // Get all form values including email and phone
+            const profileData = {
+                firstName: document.getElementById('firstName').value.trim(),
+                lastName: document.getElementById('lastName').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                street: document.getElementById('street').value.trim(),
+                city: document.getElementById('city').value.trim(),
+                state: document.getElementById('state').value.trim(),
+                postalCode: document.getElementById('postalCode').value.trim()
+            };
+
+            // Email is read-only in the form, but we'll include it in the data
+            // to ensure it's preserved in the profile update
+            profileData.email = document.getElementById('email').value.trim();
+
+            // Validate input
+            if (!profileData.firstName) {
+                this.showToast('First name is required', 'error');
+                document.getElementById('firstName').focus();
+                return;
+            }
+
+            if (!profileData.lastName) {
+                this.showToast('Last name is required', 'error');
+                document.getElementById('lastName').focus();
+                return;
+            }
+
+            // Show loading state
+            const saveBtn = document.getElementById('saveProfileBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            // Send to API endpoint
+            fetch(this.apiEndpoints.updateProfile, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache' // Prevent caching
+                },
+                body: JSON.stringify(profileData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to update profile');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    // Update local userData with the updated values
+                    Object.assign(this.userData, profileData);
+
+                    // Force a reload of profile data to ensure everything is in sync
+                    this.loadUserProfile();
+
+                    this.showToast('Profile updated successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error updating profile:', error);
+                    this.showToast('Failed to update profile. Please try again.', 'error');
+                })
+                .finally(() => {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                });
+        }
+
+        loadVehicles() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const container = document.getElementById('vehiclesContainer');
+            container.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading your vehicles...</p>
+        </div>
+    `;
+
+            fetch(this.apiEndpoints.vehicles, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load vehicles');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.vehicles = Array.isArray(data) ? data : [];
+                    this.renderVehicles();
+                })
+                .catch(error => {
+                    console.error('Error loading vehicles:', error);
+                    container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-circle"></i>
+                <h4>Failed to load vehicles</h4>
+                <p>${error.message || 'Please try again later'}</p>
+            </div>
+        `;
+                });
+        }
+
+        renderVehicles() {
+            const container = document.getElementById('vehiclesContainer');
+
+            let html = '';
+
+            if (this.vehicles.length === 0) {
+                html += `
+            <div class="empty-state">
+                <i class="fas fa-car"></i>
+                <h4>No vehicles found</h4>
+                <p>Add your first vehicle to get started.</p>
+            </div>
+        `;
+            } else {
+                html += '<div class="vehicles-grid">';
+
+                this.vehicles.forEach(vehicle => {
+                    const vehicleIcon = vehicle.category === 'Bike' ? 'motorcycle' :
+                        (vehicle.category === 'Truck' ? 'truck' : 'car');
+
+                    html += `
+                <div class="vehicle-item">
+                    <div class="vehicle-image">
+                        <i class="fas fa-${vehicleIcon}"></i>
+                    </div>
+                    <div class="vehicle-info">
+                        <h4>${vehicle.brand} ${vehicle.model}</h4>
+                        <div class="detail-row">
+                            <div class="detail-label">Registration</div>
+                            <div class="detail-value">${vehicle.registrationNumber || 'N/A'}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Year</div>
+                            <div class="detail-value">${vehicle.year || 'N/A'}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Category</div>
+                            <div class="detail-value">${vehicle.category || 'Car'}</div>
+                        </div>
+                        <div class="vehicle-actions">
+                            <button class="btn btn-outline btn-sm" onclick="profileManager.editVehicle(${vehicle.vehicleId})">
+                                <i class="fas fa-edit"></i> Edit
+                            </button>
+                            <button class="btn btn-outline btn-sm btn-danger" onclick="profileManager.deleteVehicle(${vehicle.vehicleId})">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+                });
+
+                html += '</div>';
+            }
+
+            html += `
+        <div class="add-vehicle-card" id="addVehicleBtn" onclick="profileManager.showAddVehicleModal()">
+            <div class="add-icon">
+                <i class="fas fa-plus"></i>
+            </div>
+            <div>Add New Vehicle</div>
+        </div>
+    `;
+
+            container.innerHTML = html;
+        }
+
+        showAddVehicleModal() {
+            const modalHtml = `
+        <div class="modal-overlay vehicle-modal active" id="vehicleModal">
+            <div class="modal-container">
+                <div class="modal-header">
+                    <div class="modal-title"><i class="fas fa-car-side"></i> Add New Vehicle</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <form id="vehicleForm">
+                        <input type="hidden" id="vehicleId" value="">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Brand <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="vehicleBrand" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Model <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="vehicleModel" required>
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Registration Number <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="vehicleReg" required>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Year <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="vehicleYear" min="1900" max="2025" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Category <span class="text-danger">*</span></label>
+                            <select class="form-control" id="vehicleCategory" required>
+                                <option value="Car">Car</option>
+                                <option value="Bike">Bike</option>
+                                <option value="Truck">Truck</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline modal-cancel">Cancel</button>
+                    <button class="btn btn-primary" id="saveVehicleBtn">Save Vehicle</button>
+                </div>
+            </div>
+        </div>
+    `;
+
+            if (!document.querySelector('.vehicle-modal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+                document.getElementById('saveVehicleBtn').addEventListener('click', () => this.saveVehicle());
+                document.querySelectorAll('.vehicle-modal .modal-close, .vehicle-modal .modal-cancel').forEach(btn => {
+                    btn.addEventListener('click', () => document.querySelector('.vehicle-modal').classList.remove('active'));
+                });
+            } else {
+                document.querySelector('.vehicle-modal').classList.add('active');
+                document.getElementById('vehicleForm').reset();
+                document.getElementById('vehicleId').value = '';
+            }
+        }
+
+        editVehicle(vehicleId) {
+            const vehicle = this.vehicles.find(v => v.vehicleId === vehicleId);
+            if (!vehicle) return;
+
+            this.showAddVehicleModal();
+
+            document.getElementById('vehicleId').value = vehicle.vehicleId;
+            document.getElementById('vehicleBrand').value = vehicle.brand || '';
+            document.getElementById('vehicleModel').value = vehicle.model || '';
+            document.getElementById('vehicleReg').value = vehicle.registrationNumber || '';
+            document.getElementById('vehicleYear').value = vehicle.year || '';
+            document.getElementById('vehicleCategory').value = vehicle.category || 'Car';
+
+            const modalTitle = document.querySelector('.vehicle-modal .modal-title');
+            modalTitle.innerHTML = '<i class="fas fa-edit"></i> Edit Vehicle';
+
+            const saveBtn = document.getElementById('saveVehicleBtn');
+            saveBtn.textContent = 'Update Vehicle';
+        }
+
+        saveVehicle() {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const vehicleId = document.getElementById('vehicleId').value;
+            const isEdit = vehicleId !== '';
+
+            const vehicleData = {
+                brand: document.getElementById('vehicleBrand').value,
+                model: document.getElementById('vehicleModel').value,
+                registrationNumber: document.getElementById('vehicleReg').value,
+                year: parseInt(document.getElementById('vehicleYear').value),
+                category: document.getElementById('vehicleCategory').value
+            };
+
+            if (isEdit) {
+                vehicleData.vehicleId = parseInt(vehicleId);
+            }
+
+            const saveBtn = document.getElementById('saveVehicleBtn');
+            const originalText = saveBtn.textContent;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const endpoint = isEdit ?
+                `${this.apiEndpoints.updateVehicle}/${vehicleId}` :
+                this.apiEndpoints.addVehicle;
+
+            fetch(endpoint, {
+                method: isEdit ? 'PUT' : 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(vehicleData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error(`Failed to ${isEdit ? 'update' : 'add'} vehicle`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    if (isEdit) {
+                        const index = this.vehicles.findIndex(v => v.vehicleId === parseInt(vehicleId));
+                        if (index !== -1) {
+                            this.vehicles[index] = data;
+                        }
+                    } else {
+                        this.vehicles.push(data);
+                    }
+
+                    this.renderVehicles();
+                    document.querySelector('.vehicle-modal').classList.remove('active');
+                    this.showToast(`Vehicle ${isEdit ? 'updated' : 'added'} successfully!`, 'success');
+                })
+                .catch(error => {
+                    console.error(`Error ${isEdit ? 'updating' : 'adding'} vehicle:`, error);
+                    this.showToast(`Failed to ${isEdit ? 'update' : 'add'} vehicle. Please try again.`, 'error');
+                })
+                .finally(() => {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = originalText;
+                });
+        }
+
+        deleteVehicle(vehicleId) {
+            if (!confirm('Are you sure you want to delete this vehicle? This action cannot be undone.')) return;
+
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            fetch(`${this.apiEndpoints.deleteVehicle}/${vehicleId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to delete vehicle');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.vehicles = this.vehicles.filter(v => v.vehicleId !== vehicleId);
+                    this.renderVehicles();
+                    this.showToast('Vehicle deleted successfully!', 'success');
+                })
+                .catch(error => {
+                    console.error('Error deleting vehicle:', error);
+                    this.showToast('Failed to delete vehicle. Please try again.', 'error');
+                });
+        }
+
+        loadActiveServices() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const container = document.getElementById('currentServicesContainer');
+            container.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading your active services...</p>
+        </div>
+    `;
+
+            fetch(this.apiEndpoints.activeServices, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load active services');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.activeServices = Array.isArray(data) ? data : [];
+                    this.renderActiveServices();
+                })
+                .catch(error => {
+                    console.error('Error loading active services:', error);
+                    container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-circle"></i>
+                <h4>Failed to load active services</h4>
+                <p>${error.message || 'Please try again later'}</p>
+            </div>
+        `;
+                });
+        }
+
+        renderActiveServices() {
+            const container = document.getElementById('currentServicesContainer');
+
+            if (!this.activeServices || this.activeServices.length === 0) {
+                container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-check-circle"></i>
+                <h4>No active services</h4>
+                <p>You don't have any vehicles in service at the moment.</p>
+            </div>
+        `;
+                return;
+            }
+
+            let html = '';
+
+            this.activeServices.forEach(service => {
+                const statusClass = service.status.toLowerCase();
+                const statusLabel = service.status.charAt(0) + service.status.slice(1).toLowerCase();
+
+                const startDate = service.startDate ? new Date(service.startDate).toLocaleDateString() : 'N/A';
+                const estimatedDate = service.estimatedCompletionDate ?
+                    new Date(service.estimatedCompletionDate).toLocaleDateString() : 'N/A';
+
+                html += `
+            <div class="vehicle-card">
+                <div class="vehicle-header">
+                    <div class="vehicle-name">${service.vehicleBrand} ${service.vehicleModel}</div>
+                    <div class="status-badge ${statusClass}">${statusLabel}</div>
+                </div>
+                <div class="vehicle-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Service Type</div>
+                        <div class="detail-value">${service.serviceType || 'General Service'}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Drop-off Date</div>
+                        <div class="detail-value">${startDate}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Estimated Pickup</div>
+                        <div class="detail-value">${estimatedDate}</div>
+                    </div>
+
+                    <div class="progress-steps">
+                        ${this.renderServiceSteps(service.status)}
+                    </div>
+                </div>
+            </div>
+        `;
+            });
+
+            container.innerHTML = html;
+        }
+
+        renderServiceSteps(status) {
+            const steps = ['Received', 'Diagnosis', 'Repair', 'Completed'];
+            const currentIndex = steps.findIndex(step => step.toLowerCase() === status.toLowerCase());
+
+            let stepsHtml = '';
+
+            steps.forEach((step, index) => {
+                let stepClass = '';
+                let stepIcon = '';
+
+                if (index < currentIndex) {
+                    stepClass = 'completed';
+                    stepIcon = '<i class="fas fa-check"></i>';
+                } else if (index === currentIndex) {
+                    stepClass = 'current';
+                    stepIcon = index === 3 ? '<i class="fas fa-flag-checkered"></i>' : '<i class="fas fa-wrench"></i>';
+                } else {
+                    stepIcon = index === 3 ? '<i class="fas fa-flag-checkered"></i>' : '<i class="fas fa-wrench"></i>';
+                }
+
+                stepsHtml += `
+            <div class="step ${stepClass}">
+                <div class="step-icon">${stepIcon}</div>
+                <div class="step-label">${step}</div>
+            </div>
+        `;
+            });
+
+            return stepsHtml;
+        }
+
+        loadServiceHistory() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const container = document.getElementById('serviceHistoryContainer');
+            container.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading your service history...</p>
+        </div>
+    `;
+
+            fetch(this.apiEndpoints.serviceHistory, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load service history');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.serviceHistory = Array.isArray(data) ? data : [];
+                    this.renderServiceHistory();
+                })
+                .catch(error => {
+                    console.error('Error loading service history:', error);
+                    container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-exclamation-circle"></i>
+                <h4>Failed to load service history</h4>
+                <p>${error.message || 'Please try again later'}</p>
+            </div>
+        `;
+                });
+        }
+
+        renderServiceHistory() {
+            const container = document.getElementById('serviceHistoryContainer');
+
+            if (!this.serviceHistory || this.serviceHistory.length === 0) {
+                container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-history"></i>
+                <h4>No service history</h4>
+                <p>You don't have any completed services yet.</p>
+            </div>
+        `;
+                return;
+            }
+
+            let html = '';
+
+            this.serviceHistory.forEach(service => {
+                const serviceDate = service.formattedCompletedDate ||
+                    (service.completedDate ? new Date(service.completedDate).toLocaleDateString() : 'N/A');
+
+                let totalCost = service.totalAmount || 0;
+
+                html += `
+            <div class="history-item">
+                <div class="history-header">
+                    <div class="vehicle-name">${service.vehicleBrand} ${service.vehicleModel}</div>
+                    <div class="status-badge completed">Completed</div>
+                </div>
+                <div class="history-body">
+                    <div class="service-details">
+                        <div class="detail-row">
+                            <div class="detail-label">Service Date</div>
+                            <div class="detail-value">${serviceDate}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Service Type</div>
+                            <div class="detail-value">${service.serviceType || 'General Service'}</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Total Cost</div>
+                            <div class="detail-value">₹${this.formatCurrency(totalCost)}</div>
+                        </div>
+                    </div>
+                    <div class="action-buttons">
+                        <button class="btn btn-outline btn-sm" onclick="profileManager.viewServiceDetails(${service.requestId})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button class="btn btn-primary btn-sm" onclick="profileManager.downloadServicePDF(${service.requestId})">
+                            <i class="fas fa-download"></i> Download PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+            });
+
+            container.innerHTML = html;
+        }
+
+
+        downloadServicePDF(requestId) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const service = this.serviceHistory.find(s => s.requestId === requestId);
+            if (!service) return;
+
+            fetch(`${this.apiEndpoints.serviceDetails}${requestId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load service details');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    this.pdfGenerator.generateServicePDF(data);
+                })
+                .catch(error => {
+                    console.error('Error downloading service PDF:', error);
+                    this.showToast('Failed to download service PDF. Please try again.', 'error');
+                });
+        }
+
+        // Modified methods in ProfileManager class
+
+        loadInvoices() {
+            const token = this.getAuthToken();
+
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const container = document.getElementById('invoicesContainer');
+            if (!container) {
+                console.error('Invoice container element not found');
+                return;
+            }
+
+            container.innerHTML = `
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+            <p>Loading your invoices...</p>
+        </div>
+    `;
+
+            // Make sure invoices property is initialized if somehow it's undefined
+            if (!this.invoices) {
+                this.invoices = [];
+            }
+
+            fetch(this.apiEndpoints.invoices || '/customer/api/invoices', {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Cache-Control': 'no-cache'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load invoices');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    console.log('Invoices loaded:', data);
+                    this.invoices = Array.isArray(data) ? data : [];
+                    this.renderInvoices();
+                })
+                .catch(error => {
+                    console.error('Error loading invoices:', error);
+                    container.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h4>Failed to load invoices</h4>
+                    <p>${error.message || 'Please try again later'}</p>
+                    <button class="btn btn-primary mt-3" onclick="profileManager.loadInvoices()">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+                });
+        }
+
+        // Method to render invoices in the UI
+        renderInvoices() {
+            // Safety check for container
+            const container = document.getElementById('invoicesContainer');
+            if (!container) {
+                console.error('Invoice container element not found');
+                return;
+            }
+
+            // Ensure invoices is initialized
+            if (!this.invoices) {
+                this.invoices = [];
+                console.warn('Invoices array was undefined, initialized to empty array');
+            }
+
+            // Handle empty invoices list
+            if (!this.invoices.length) {
+                container.innerHTML = `
+            <div style="text-align: right; margin-bottom: 20px;">
+                <button class="btn btn-outline btn-sm" onclick="profileManager.refreshInvoiceList()">
+                    <i class="fas fa-sync-alt"></i> Refresh List
+                </button>
+            </div>
+            <div class="empty-state">
+                <i class="fas fa-file-invoice"></i>
+                <h4>No invoices</h4>
+                <p>You don't have any invoices yet.</p>
+            </div>
+        `;
+                return;
+            }
+
+            // Safety filter to ensure we don't have any null or undefined items
+            const validInvoices = this.invoices.filter(invoice => invoice !== null && invoice !== undefined);
+
+            // Sort invoices by paid status and date
+            const pendingInvoices = validInvoices
+                .filter(invoice => invoice.paid === false)
+                .sort((a, b) => {
+                    const dateA = a.completedDate ? new Date(a.completedDate) : new Date(0);
+                    const dateB = b.completedDate ? new Date(b.completedDate) : new Date(0);
+                    return dateB - dateA; // Sort newest first
+                });
+
+            const paidInvoices = validInvoices
+                .filter(invoice => invoice.paid === true)
+                .sort((a, b) => {
+                    const dateA = a.completedDate ? new Date(a.completedDate) : new Date(0);
+                    const dateB = b.completedDate ? new Date(b.completedDate) : new Date(0);
+                    return dateB - dateA; // Sort newest first
+                });
+
+            let html = '';
+
+            // Add refresh button at the top
+            html += `
+        <div style="text-align: right; margin-bottom: 20px;">
+            <button class="btn btn-outline btn-sm" onclick="profileManager.refreshInvoiceList()">
+                <i class="fas fa-sync-alt"></i> Refresh List
+            </button>
+        </div>
+    `;
+
+            // If no pending invoices but there are paid ones, add a success message
+            if (pendingInvoices.length === 0 && paidInvoices.length > 0) {
+                html += `
+            <div class="alert alert-success" style="margin-bottom: 20px;">
+                <i class="fas fa-check-circle"></i> All your invoices have been paid. Thank you!
+            </div>
+        `;
+            }
+
+            // Render pending invoices section
+            if (pendingInvoices.length > 0) {
+                html += `
+            <div class="invoice-section">
+                <h3 class="invoice-section-title">Pending Invoices</h3>
+                <div class="invoice-list">
+        `;
+
+                pendingInvoices.forEach(invoice => {
+                    // Safe access to properties with fallbacks
+                    const invoiceId = invoice.invoiceId || 'N/A';
+                    const requestId = invoice.requestId || 'N/A';
+                    const vehicleBrand = invoice.vehicleBrand || '';
+                    const vehicleModel = invoice.vehicleModel || '';
+                    const totalAmount = invoice.totalAmount || 0;
+
+                    // Handle date formatting safely
+                    let invoiceDate = 'N/A';
+                    if (invoice.formattedCompletedDate) {
+                        invoiceDate = invoice.formattedCompletedDate;
+                    } else if (invoice.completedDate) {
+                        try {
+                            invoiceDate = new Date(invoice.completedDate).toLocaleDateString();
+                        } catch (e) {
+                            console.warn('Error formatting date:', e);
+                        }
+                    }
+
+                    html += `
+                <div class="invoice-card pending">
+                    <div class="invoice-header">
+                        <div class="invoice-title">Invoice #${invoiceId}</div>
+                        <div class="invoice-status">Pending</div>
+                    </div>
+                    <div class="invoice-body">
+                        <div class="invoice-detail">
+                            <div class="detail-label">Service Date:</div>
+                            <div class="detail-value">${invoiceDate}</div>
+                        </div>
+                        <div class="invoice-detail">
+                            <div class="detail-label">Vehicle:</div>
+                            <div class="detail-value">${vehicleBrand} ${vehicleModel}</div>
+                        </div>
+                        <div class="invoice-detail">
+                            <div class="detail-label">Amount:</div>
+                            <div class="detail-value">₹${this.formatCurrency(totalAmount)}</div>
+                        </div>
+                        <div class="invoice-actions">
+                            <button class="btn btn-outline btn-sm" onclick="profileManager.viewInvoice(${invoiceId})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="profileManager.downloadInvoicePDF(${invoiceId})">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-primary btn-sm" id="payBtn-${invoiceId}" onclick="profileManager.payInvoice(${invoiceId})">
+                                <i class="fas fa-credit-card"></i> Pay Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+                });
+
+                html += `
+                </div>
+            </div>
+        `;
+            }
+
+            // Render paid invoices section
+            if (paidInvoices.length > 0) {
+                html += `
+            <div class="invoice-section">
+                <h3 class="invoice-section-title">Paid Invoices</h3>
+                <div class="invoice-list">
+        `;
+
+                paidInvoices.forEach(invoice => {
+                    // Safe access to properties with fallbacks
+                    const invoiceId = invoice.invoiceId || 'N/A';
+                    const requestId = invoice.requestId || 'N/A';
+                    const vehicleBrand = invoice.vehicleBrand || '';
+                    const vehicleModel = invoice.vehicleModel || '';
+                    const totalAmount = invoice.totalAmount || 0;
+
+                    // Handle date formatting safely
+                    let invoiceDate = 'N/A';
+                    if (invoice.formattedCompletedDate) {
+                        invoiceDate = invoice.formattedCompletedDate;
+                    } else if (invoice.completedDate) {
+                        try {
+                            invoiceDate = new Date(invoice.completedDate).toLocaleDateString();
+                        } catch (e) {
+                            console.warn('Error formatting date:', e);
+                        }
+                    }
+
+                    // Payment date (optional)
+                    let paymentDate = 'N/A';
+                    if (invoice.paymentDate) {
+                        try {
+                            paymentDate = new Date(invoice.paymentDate).toLocaleDateString();
+                        } catch (e) {
+                            console.warn('Error formatting payment date:', e);
+                        }
+                    }
+
+                    html += `
+                <div class="invoice-card paid">
+                    <div class="invoice-header">
+                        <div class="invoice-title">Invoice #${invoiceId}</div>
+                        <div class="invoice-status">Paid</div>
+                    </div>
+                    <div class="invoice-body">
+                        <div class="invoice-detail">
+                            <div class="detail-label">Service Date:</div>
+                            <div class="detail-value">${invoiceDate}</div>
+                        </div>
+                        <div class="invoice-detail">
+                            <div class="detail-label">Vehicle:</div>
+                            <div class="detail-value">${vehicleBrand} ${vehicleModel}</div>
+                        </div>
+                        <div class="invoice-detail">
+                            <div class="detail-label">Amount:</div>
+                            <div class="detail-value">₹${this.formatCurrency(totalAmount)}</div>
+                        </div>
+                        ${invoice.paymentDate ? `
+                        <div class="invoice-detail">
+                            <div class="detail-label">Payment Date:</div>
+                            <div class="detail-value">${paymentDate}</div>
+                        </div>
+                        ` : ''}
+                        <div class="invoice-actions">
+                            <button class="btn btn-outline btn-sm" onclick="profileManager.viewInvoice(${invoiceId})">
+                                <i class="fas fa-eye"></i> View
+                            </button>
+                            <button class="btn btn-outline btn-sm" onclick="profileManager.downloadInvoicePDF(${invoiceId})">
+                                <i class="fas fa-download"></i> Download
+                            </button>
+                            <button class="btn btn-success btn-sm" disabled title="This invoice has been paid">
+                                <i class="fas fa-check-circle"></i> Paid
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+                });
+
+                html += `
+                </div>
+            </div>
+        `;
+            }
+
+            // Set the HTML content
+            try {
+                container.innerHTML = html;
+            } catch (error) {
+                console.error('Error updating invoice container:', error);
+                container.innerHTML = `
+            <div class="alert alert-danger">
+                <i class="fas fa-exclamation-triangle"></i> An error occurred while displaying invoices. Please try refreshing the page.
+            </div>
+        `;
+            }
+        }
+
+// Helper method to format currency values safely
+        formatCurrency(amount) {
+            if (amount === null || amount === undefined) return '0.00';
+
+            // Convert strings to numbers if needed
+            let value = amount;
+            if (typeof amount === 'string') {
+                try {
+                    value = parseFloat(amount);
+                } catch (e) {
+                    console.warn('Error parsing currency value:', e);
+                    return '0.00';
+                }
+            }
+
+            // Handle NaN and non-numeric values
+            if (isNaN(value) || typeof value !== 'number') {
+                return '0.00';
+            }
+
+            // Format the number with 2 decimal places and thousands separators
+            try {
+                return value.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            } catch (e) {
+                console.warn('Error formatting currency:', e);
+                return '0.00';
+            }
+        }
+
+// Method to refresh the invoice list
+        refreshInvoiceList() {
+            try {
+                // Force reload the invoices data
+                this.loadInvoices();
+
+                // Show a toast notification
+                this.showToast('Invoice list has been refreshed', 'info');
+            } catch (error) {
+                console.error('Error refreshing invoice list:', error);
+                this.showToast('Error refreshing invoice list. Please try again.', 'error');
+            }
+        }
+
+        viewInvoice(invoiceId) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const invoice = this.invoices.find(i => i.invoiceId === invoiceId);
+            if (!invoice) return;
+
+            // Show loading state in modal before data is fetched
+            const modalHtml = `
+        <div class="modal-overlay invoice-detail-modal active">
+            <div class="modal-container" style="max-width: 700px;">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-file-invoice-dollar"></i> Invoice #${invoiceId}
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading invoice details...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            if (!document.querySelector('.invoice-detail-modal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                document.querySelectorAll('.invoice-detail-modal .modal-close').forEach(btn => {
+                    btn.addEventListener('click', () => document.querySelector('.invoice-detail-modal').classList.remove('active'));
+                });
+            } else {
+                document.querySelector('.invoice-detail-modal').innerHTML = `<div class="modal-container" style="max-width: 700px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-file-invoice-dollar"></i> Invoice #${invoiceId}
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading invoice details...</p>
+                </div>
+            </div>
+        </div>`;
+                document.querySelector('.invoice-detail-modal').classList.add('active');
+
+                document.querySelectorAll('.invoice-detail-modal .modal-close').forEach(btn => {
+                    btn.addEventListener('click', () => document.querySelector('.invoice-detail-modal').classList.remove('active'));
+                });
+            }
+
+            // Fetch complete details from the API
+            fetch(`${this.apiEndpoints.serviceDetails}${invoice.requestId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Cache-Control': 'no-cache'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load invoice details');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    console.log('Invoice details loaded:', data);
+
+                    // Update modal with the fetched data
+                    this.renderInvoiceModal(data, invoiceId, invoice.paid);
+                })
+                .catch(error => {
+                    console.error('Error loading invoice details:', error);
+                    document.querySelector('.invoice-detail-modal .modal-body').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h4>Failed to load invoice details</h4>
+                    <p>${error.message || 'Please try again later'}</p>
+                    <button class="btn btn-primary mt-3" onclick="profileManager.viewInvoice(${invoiceId})">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+                });
+        }
+
+
+        renderInvoiceModal(data, invoiceId, isPaid) {
+            // Get modal container
+            const modalBody = document.querySelector('.invoice-detail-modal .modal-body');
+
+            // Format dates for display
+            const serviceDate = data.formattedCompletedDate ||
+                (data.completedDate ? new Date(data.completedDate).toLocaleDateString() : 'N/A');
+
+            // Create the invoice details HTML
+            const html = `
+        <div class="invoice-detail-header">
+            <div class="company-info">
+                <h3>Albany Vehicle Service</h3>
+                <p>123 Albany Street, Chennai, India</p>
+                <p>Phone: +91 98765 43210</p>
+                <p>Email: support@albanyservice.com</p>
+            </div>
+            <div class="invoice-info">
+                <h4>INVOICE</h4>
+                <p><strong>Invoice #:</strong> ${invoiceId}</p>
+                <p><strong>Date:</strong> ${serviceDate}</p>
+                <p><strong>Status:</strong> ${isPaid ? 'Paid' : 'Pending'}</p>
+            </div>
+        </div>
+
+        <div class="customer-vehicle-info">
+            <div class="customer-info">
+                <h4>Customer</h4>
+                <p>${data.customerName || 'N/A'}</p>
+                <p>${data.customerEmail || 'N/A'}</p>
+                <p>${data.customerPhone || 'N/A'}</p>
+            </div>
+            <div class="vehicle-info">
+                <h4>${data.vehicleBrand || ''} ${data.vehicleModel || ''}</h4>
+                <p>Reg #: ${data.registrationNumber || 'N/A'}</p>
+                <p>Year: ${data.vehicleYear || 'N/A'}</p>
+            </div>
+        </div>
+
+        <div class="service-details">
+            <h4>Service Details</h4>
+            <table class="invoice-table">
+                <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Quantity</th>
+                        <th>Unit Price</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${this.renderInvoiceItems(data)}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="invoice-summary">
+            <div class="summary-row">
+                <div class="summary-label">Subtotal:</div>
+                <div class="summary-value">₹${this.formatCurrency(data.calculatedSubtotal)}</div>
+            </div>
+            <div class="summary-row">
+                <div class="summary-label">GST (18%):</div>
+                <div class="summary-value">₹${this.formatCurrency(data.calculatedTax)}</div>
+            </div>
+            <div class="summary-row total">
+                <div class="summary-label">Total Amount:</div>
+                <div class="summary-value">₹${this.formatCurrency(data.calculatedTotal)}</div>
+            </div>
+        </div>
+
+        <div class="invoice-notes">
+            <p><strong>Note:</strong> This is a computer-generated invoice and does not require a signature.</p>
+        </div>
+    `;
+
+            modalBody.innerHTML = html;
+
+            // Update footer buttons
+            const modalContainer = document.querySelector('.invoice-detail-modal .modal-container');
+            const modalFooter = document.createElement('div');
+            modalFooter.className = 'modal-footer';
+            modalFooter.innerHTML = `
+        <button class="btn btn-outline modal-cancel">Close</button>
+        <button class="btn btn-outline" onclick="profileManager.downloadInvoicePDF(${invoiceId})">
+            <i class="fas fa-download"></i> Download PDF
+        </button>
+        ${!isPaid ? `
+        <button class="btn btn-primary" onclick="profileManager.payInvoice(${invoiceId})">
+            <i class="fas fa-credit-card"></i> Pay Now
+        </button>` : ''}
+    `;
+
+            // Remove existing footer if any
+            const existingFooter = modalContainer.querySelector('.modal-footer');
+            if (existingFooter) {
+                existingFooter.remove();
+            }
+
+            modalContainer.appendChild(modalFooter);
+
+            // Add event listeners
+            modalContainer.querySelectorAll('.modal-cancel').forEach(btn => {
+                btn.addEventListener('click', () => document.querySelector('.invoice-detail-modal').classList.remove('active'));
+            });
+        }
+
+        renderInvoiceItems(data) {
+            let html = '';
+
+            // Add materials used
+            if (data.materials && data.materials.length > 0) {
+                data.materials.forEach(material => {
+                    if (!material) return;
+
+                    const quantity = material.quantity || 0;
+                    const unitPrice = material.unitPrice || 0;
+                    let total;
+
+                    // Handle different ways the data might be formatted
+                    if (typeof quantity === 'object' && quantity.multiply) {
+                        total = quantity.multiply(unitPrice);
+                    } else {
+                        total = parseFloat(quantity) * parseFloat(unitPrice);
+                    }
+
+                    html += `
+                <tr>
+                    <td>${material.name || 'Unknown'} (Part)</td>
+                    <td>${quantity}</td>
+                    <td>₹${this.formatCurrency(unitPrice)}</td>
+                    <td>₹${this.formatCurrency(total)}</td>
+                </tr>
+            `;
+                });
+            }
+
+            // Add labor charges
+            if (data.laborCharges && data.laborCharges.length > 0) {
+                data.laborCharges.forEach(labor => {
+                    if (!labor) return;
+
+                    const hours = labor.hours || 0;
+                    const rate = labor.rate || 0;
+                    let total;
+
+                    // Handle different ways the data might be formatted
+                    if (typeof hours === 'object' && hours.multiply) {
+                        total = hours.multiply(rate);
+                    } else {
+                        total = parseFloat(hours) * parseFloat(rate);
+                    }
+
+                    html += `
+                <tr>
+                    <td>${labor.description || 'Service Labor'}</td>
+                    <td>${hours} hrs</td>
+                    <td>₹${this.formatCurrency(rate)}/hr</td>
+                    <td>₹${this.formatCurrency(total)}</td>
+                </tr>
+            `;
+                });
+            } else {
+                // Fallback if no labor charges are provided
+                html += `
+            <tr>
+                <td>Service Labor</td>
+                <td>2 hrs</td>
+                <td>₹500.00/hr</td>
+                <td>₹1,000.00</td>
+            </tr>
+        `;
+            }
+
+            // Add premium discount if applicable
+            if (data.calculatedDiscount && parseFloat(data.calculatedDiscount) > 0) {
+                html += `
+            <tr class="discount-row">
+                <td colspan="3">Premium Membership Discount (30% off labor)</td>
+                <td>-₹${this.formatCurrency(data.calculatedDiscount)}</td>
+            </tr>
+        `;
+            }
+
+            return html;
+        }
+
+        viewServiceDetails(requestId) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const service = this.serviceHistory.find(s => s.requestId === requestId);
+            if (!service) return;
+
+            // Show loading state in modal
+            const modalHtml = `
+        <div class="modal-overlay service-detail-modal active">
+            <div class="modal-container" style="max-width: 700px;">
+                <div class="modal-header">
+                    <div class="modal-title">
+                        <i class="fas fa-clipboard-list"></i> Service Details
+                    </div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <div class="loading-spinner">
+                        <div class="spinner"></div>
+                        <p>Loading service details...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+
+            if (!document.querySelector('.service-detail-modal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                document.querySelectorAll('.service-detail-modal .modal-close').forEach(btn => {
+                    btn.addEventListener('click', () => document.querySelector('.service-detail-modal').classList.remove('active'));
+                });
+            } else {
+                document.querySelector('.service-detail-modal').innerHTML = `<div class="modal-container" style="max-width: 700px;">
+            <div class="modal-header">
+                <div class="modal-title">
+                    <i class="fas fa-clipboard-list"></i> Service Details
+                </div>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="loading-spinner">
+                    <div class="spinner"></div>
+                    <p>Loading service details...</p>
+                </div>
+            </div>
+        </div>`;
+                document.querySelector('.service-detail-modal').classList.add('active');
+
+                document.querySelectorAll('.service-detail-modal .modal-close').forEach(btn => {
+                    btn.addEventListener('click', () => document.querySelector('.service-detail-modal').classList.remove('active'));
+                });
+            }
+
+            // Fetch complete details from the API
+            fetch(`${this.apiEndpoints.serviceDetails}${requestId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Cache-Control': 'no-cache'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load service details');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    console.log('Service details loaded:', data); // Debug log
+
+                    // Render the service details modal
+                    this.renderServiceDetailsModal(data);
+                })
+                .catch(error => {
+                    console.error('Error loading service details:', error);
+                    document.querySelector('.service-detail-modal .modal-body').innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <h4>Failed to load service details</h4>
+                    <p>${error.message || 'Please try again later'}</p>
+                    <button class="btn btn-primary mt-3" onclick="profileManager.viewServiceDetails(${requestId})">
+                        <i class="fas fa-sync"></i> Retry
+                    </button>
+                </div>
+            `;
+                });
+        }
+
+        renderServiceDetailsModal(data) {
+            // Get modal container
+            const modalBody = document.querySelector('.service-detail-modal .modal-body');
+
+            // Create the service details HTML
+            const html = `
+        <div class="service-detail-header">
+            <h3>${data.vehicleBrand || ''} ${data.vehicleModel || ''}</h3>
+            <div class="status-badge completed">Completed</div>
+        </div>
+
+        <div class="section-title">Vehicle Information</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="detail-label">Registration</div>
+                <div class="detail-value">${data.registrationNumber || 'N/A'}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Year</div>
+                <div class="detail-value">${data.vehicleYear || 'N/A'}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Type</div>
+                <div class="detail-value">${data.vehicleType || 'N/A'}</div>
+            </div>
+        </div>
+
+        <div class="section-title">Service Information</div>
+        <div class="detail-grid">
+            <div class="detail-item">
+                <div class="detail-label">Service Type</div>
+                <div class="detail-value">${data.serviceType || 'General Service'}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Service Date</div>
+                <div class="detail-value">${data.formattedCompletedDate || 'N/A'}</div>
+            </div>
+            <div class="detail-item">
+                <div class="detail-label">Service Advisor</div>
+                <div class="detail-value">${data.serviceAdvisorName || 'N/A'}</div>
+            </div>
+        </div>
+
+        <div class="section-title">Materials Used</div>
+        ${this.renderMaterialsTable(data.materials)}
+
+        <div class="section-title">Charges</div>
+        <div class="charges-summary">
+            <div class="charge-row">
+                <div class="charge-label">Materials Total</div>
+                <div class="charge-value">₹${this.formatCurrency(data.calculatedMaterialsTotal)}</div>
+            </div>
+            <div class="charge-row">
+                <div class="charge-label">Labor Charges</div>
+                <div class="charge-value">₹${this.formatCurrency(data.calculatedLaborTotal)}</div>
+            </div>
+            ${parseFloat(data.calculatedDiscount) > 0 ? `
+            <div class="charge-row discount">
+                <div class="charge-label">Premium Discount</div>
+                <div class="charge-value">-₹${this.formatCurrency(data.calculatedDiscount)}</div>
+            </div>` : ''}
+            <div class="charge-row">
+                <div class="charge-label">Subtotal</div>
+                <div class="charge-value">₹${this.formatCurrency(data.calculatedSubtotal)}</div>
+            </div>
+            <div class="charge-row">
+                <div class="charge-label">Tax (18% GST)</div>
+                <div class="charge-value">₹${this.formatCurrency(data.calculatedTax)}</div>
+            </div>
+            <div class="charge-row total">
+                <div class="charge-label">Total Amount</div>
+                <div class="charge-value">₹${this.formatCurrency(data.calculatedTotal)}</div>
+            </div>
+        </div>
+    `;
+
+            modalBody.innerHTML = html;
+
+            // Update footer buttons
+            const modalContainer = document.querySelector('.service-detail-modal .modal-container');
+            const modalFooter = document.createElement('div');
+            modalFooter.className = 'modal-footer';
+            modalFooter.innerHTML = `
+        <button class="btn btn-outline modal-cancel">Close</button>
+        <button class="btn btn-primary" onclick="profileManager.downloadServicePDF(${data.requestId})">
+            <i class="fas fa-download"></i> Download as PDF
+        </button>
+    `;
+
+            // Remove existing footer if any
+            const existingFooter = modalContainer.querySelector('.modal-footer');
+            if (existingFooter) {
+                existingFooter.remove();
+            }
+
+            modalContainer.appendChild(modalFooter);
+
+            // Add event listeners
+            modalContainer.querySelectorAll('.modal-cancel').forEach(btn => {
+                btn.addEventListener('click', () => document.querySelector('.service-detail-modal').classList.remove('active'));
+            });
+        }
+
+        renderMaterialsTable(materials) {
+            if (!materials || materials.length === 0) {
+                return `
+            <div class="empty-message">
+                <i class="fas fa-info-circle"></i> No materials were used for this service.
+            </div>
+        `;
+            }
+
+            let html = `
+        <table class="materials-table">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Unit Price</th>
+                    <th>Total</th>
+                </tr>
+            </thead>
+            <tbody>
+    `;
+
+            materials.forEach(material => {
+                if (!material) return;
+
+                const quantity = material.quantity || 0;
+                const unitPrice = material.unitPrice || 0;
+                let total;
+
+                // Handle different ways the data might be formatted
+                if (typeof quantity === 'object' && quantity.multiply) {
+                    total = quantity.multiply(unitPrice);
+                } else {
+                    total = parseFloat(quantity) * parseFloat(unitPrice);
+                }
+
+                html += `
+            <tr>
+                <td>${material.name || 'Unknown'}</td>
+                <td>${quantity}</td>
+                <td>₹${this.formatCurrency(unitPrice)}</td>
+                <td>₹${this.formatCurrency(total)}</td>
+            </tr>
+        `;
+            });
+
+            html += `
+            </tbody>
+        </table>
+    `;
+
+            return html;
+        }
+
+
+
+        downloadInvoicePDF(invoiceId) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const invoice = this.invoices.find(i => i.invoiceId === invoiceId);
+            if (!invoice) return;
+
+            fetch(`${this.apiEndpoints.serviceDetails}${invoice.requestId}`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to load invoice details');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    data.invoiceId = invoiceId;
+                    data.isPaid = invoice.paid;
+                    this.pdfGenerator.generateInvoicePDF(data);
+                })
+                .catch(error => {
+                    console.error('Error downloading invoice PDF:', error);
+                    this.showToast('Failed to download invoice PDF. Please try again.', 'error');
+                });
+        }
+
+        payInvoice(invoiceId) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            // Store the current invoice ID for use in payment verification
+            this.currentInvoiceId = invoiceId;
+
+            const invoice = this.invoices.find(i => i.invoiceId === invoiceId);
+            if (!invoice) return;
+
+            // Check if already paid first
+            if (invoice.paid) {
+                this.showToast('This invoice has already been paid.', 'info');
+                return;
+            }
+
+            // Show loading indicator
+            const payBtn = document.getElementById(`payBtn-${invoiceId}`);
+            if (payBtn) {
+                const originalText = payBtn.innerHTML;
+                payBtn.disabled = true;
+                payBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
+
+                // Restore button after 10 seconds in case of errors
+                setTimeout(() => {
+                    if (payBtn && payBtn.innerHTML.includes('spinner')) {
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = originalText;
+                    }
+                }, 10000);
+            }
+
+            // Make sure we're using the correct endpoint pattern and safely handle errors
+            const paymentEndpoint = this.apiEndpoints.createPayment ?
+                this.apiEndpoints.createPayment.replace('{id}', invoiceId) :
+                `/customer/api/invoices/${invoiceId}/payment`;
+
+            fetch(paymentEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    // Reset button state
+                    if (payBtn) {
+                        payBtn.disabled = false;
+                        payBtn.innerHTML = '<i class="fas fa-credit-card"></i> Pay Now';
+                    }
+
+                    if (!response.ok) {
+                        return response.json().then(data => {
+                            throw new Error(data.message || 'Failed to create payment');
+                        });
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+                    this.openRazorpayModal(data);
+                })
+                .catch(error => {
+                    console.error('Error creating payment:', error);
+                    this.showToast(error.message || 'Failed to initiate payment. Please try again.', 'error');
+
+                    // If error indicates invoice is paid, refresh the invoices list
+                    if (error.message && error.message.includes('already been paid')) {
+                        this.loadInvoices();
+                    }
+                });
+        }
+
+
+        openRazorpayModal(paymentData) {
+            const options = {
+                key: paymentData.razorpayKey,
+                amount: paymentData.amount,
+                currency: paymentData.currency,
+                name: 'Albany Vehicle Service',
+                description: 'Payment for Invoice #' + paymentData.invoiceId,
+                order_id: paymentData.orderId,
+                handler: (response) => {
+                    this.handlePaymentSuccess(paymentData.paymentId, response, paymentData.invoiceId);
+                },
+                prefill: {
+                    name: paymentData.name,
+                    email: paymentData.email,
+                    contact: paymentData.phone
+                },
+                theme: {
+                    color: '#722F37'
+                },
+                modal: {
+                    ondismiss: () => {
+                        this.showToast('Payment cancelled', 'info');
+                    }
+                }
+            };
+
+            const razorpayWindow = new Razorpay(options);
+            razorpayWindow.open();
+        }
+
+// Method to handle successful payment
+        // Method to handle successful payment
+        // Optimized handlePaymentSuccess method to properly update UI after payment
+        handlePaymentSuccess(paymentId, razorpayResponse) {
+            const token = this.getAuthToken();
+            if (!token) {
+                this.handleUnauthorized();
+                return;
+            }
+
+            const paymentData = {
+                paymentId: paymentId,
+                razorpayPaymentId: razorpayResponse.razorpay_payment_id,
+                razorpayOrderId: razorpayResponse.razorpay_order_id,
+                razorpaySignature: razorpayResponse.razorpay_signature
+            };
+
+            fetch(this.apiEndpoints.verifyPayment, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${token}`,
+                    'Content-Type': 'application/json',
+                    'Cache-Control': 'no-cache' // Prevent caching
+                },
+                body: JSON.stringify(paymentData)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        if (response.status === 401) {
+                            this.handleUnauthorized();
+                            return null;
+                        }
+                        throw new Error('Failed to verify payment');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (!data) return;
+
+                    if (data.success) {
+                        this.showToast('Payment successful!', 'success');
+
+                        // Update the local invoices data to reflect the payment
+                        const invoiceIndex = this.invoices.findIndex(inv => inv.invoiceId === parseInt(paymentId));
+                        if (invoiceIndex !== -1) {
+                            this.invoices[invoiceIndex].paid = true;
+                            this.renderInvoices(); // Re-render the invoices list
+                        }
+
+                        // Force refresh from server to ensure data is current
+                        setTimeout(() => this.loadInvoices(), 500);
+
+                        if (document.querySelector('.invoice-detail-modal')) {
+                            document.querySelector('.invoice-detail-modal').classList.remove('active');
+                        }
+                    } else {
+                        this.showToast(data.message || 'Payment verification failed', 'error');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error verifying payment:', error);
+                    this.showToast('Failed to verify payment. Please contact support.', 'error');
+                });
+        }
+
+// Method to show a success modal after payment
+        showPaymentSuccessModal(paymentData) {
+            const modalHtml = `
+        <div class="modal-overlay payment-success-modal active">
+            <div class="modal-container">
+                <div class="modal-header" style="background-color: #10b981; color: white;">
+                    <div class="modal-title"><i class="fas fa-check-circle"></i> Payment Successful</div>
+                    <button class="modal-close">&times;</button>
+                </div>
+                <div class="modal-body" style="text-align: center; padding: 2rem;">
+                    <div style="font-size: 3rem; color: #10b981; margin-bottom: 1rem;">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <h3>Thank you for your payment!</h3>
+                    <p>Your payment has been processed successfully.</p>
+                    <div style="background-color: #f8f9fa; padding: 1rem; border-radius: 8px; margin: 1.5rem 0; text-align: left;">
+                        <p><strong>Transaction ID:</strong> ${paymentData.transactionId || 'N/A'}</p>
+                        <p><strong>Payment ID:</strong> ${paymentData.paymentId || 'N/A'}</p>
+                        <p><strong>Status:</strong> ${paymentData.status || 'Completed'}</p>
+                    </div>
+                    <p>A confirmation has been sent to your email address.</p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" onclick="document.querySelector('.payment-success-modal').classList.remove('active');">
+                        Continue
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+
+            // Add modal to document if it doesn't exist
+            if (!document.querySelector('.payment-success-modal')) {
+                document.body.insertAdjacentHTML('beforeend', modalHtml);
+                document.querySelector('.payment-success-modal .modal-close').addEventListener('click', () => {
+                    document.querySelector('.payment-success-modal').classList.remove('active');
+                });
+            } else {
+                // Update existing modal
+                const modalElement = document.querySelector('.payment-success-modal');
+                modalElement.innerHTML = modalHtml;
+                modalElement.classList.add('active');
+                modalElement.querySelector('.modal-close').addEventListener('click', () => {
+                    modalElement.classList.remove('active');
+                });
+            }
+
+            // Automatically close the modal after 10 seconds
+            setTimeout(() => {
+                const modal = document.querySelector('.payment-success-modal');
+                if (modal && modal.classList.contains('active')) {
+                    modal.classList.remove('active');
+                }
+            }, 10000);
+        }
+
+
+        setRandomAvatar() {
+            const avatarTypes = ['adventurer', 'bottts', 'avataaars', 'jdenticon', 'identicon', 'gridy', 'micah'];
+            const randomType = avatarTypes[Math.floor(Math.random() * avatarTypes.length)];
+            const seed = Math.random().toString(36).substring(2, 10);
+
+            const avatarUrl = `https://api.dicebear.com/7.x/${randomType}/svg?seed=${seed}`;
+            document.getElementById('profileAvatar').src = avatarUrl;
+        }
+
+        getAuthToken() {
+            return sessionStorage.getItem('authToken') || localStorage.getItem('authToken');
+        }
+
+        handleUnauthorized() {
+            sessionStorage.removeItem('authToken');
+            localStorage.removeItem('authToken');
+            window.location.href = '/authentication/login?message=Your session has expired. Please login again.&type=error&redirect=/customer/profile';
+        }
+
+        logout() {
+            sessionStorage.removeItem('authToken');
+            localStorage.removeItem('authToken');
+            window.location.href = '/authentication/login';
+        }
+
+
+        showToast(message, type = 'success') {
+            const toastContainer = document.querySelector('.toast-container');
+            const toastId = `toast-${Date.now()}`;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.id = toastId;
+
+            toast.innerHTML = `
+        <div class="toast-header">
+            <strong>${type.charAt(0).toUpperCase() + type.slice(1)}</strong>
+            <button class="toast-close">&times;</button>
+        </div>
+        <div class="toast-body">${message}</div>
+    `;
+
+            toastContainer.appendChild(toast);
+
+            setTimeout(() => toast.classList.add('show'), 10);
+
+            const hideTimeout = setTimeout(() => this.removeToast(toastId), 5000);
+
+            toast.querySelector('.toast-close').addEventListener('click', () => {
+                clearTimeout(hideTimeout);
+                this.removeToast(toastId);
+            });
+        }
+
+        removeToast(id) {
+            const toast = document.getElementById(id);
+            if (toast) {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }
+        }
+    }
+
+
+    class PDFGenerator {
+        constructor() {
+            this.loadJsPDF();
+        }
+
+        loadJsPDF() {
+            if (typeof jspdf === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+                script.async = true;
+                document.head.appendChild(script);
+            }
+        }
+
+        generateInvoicePDF(data) {
+            if (typeof jspdf === 'undefined') {
+                setTimeout(() => this.generateInvoicePDF(data), 500);
+                return;
+            }
+
+            const { jsPDF } = jspdf;
+            const doc = new jsPDF();
+
+            // Set document properties
+            doc.setProperties({
+                title: `Albany Invoice #${data.invoiceId}`,
+                subject: 'Vehicle Service Invoice',
+                author: 'Albany Vehicle Service',
+                keywords: 'invoice, vehicle, service',
+                creator: 'Albany Service System'
+            });
+
+            // Colors
+            const primaryColor = [114, 47, 55]; // RGB for #722F37
+            const textColor = [50, 50, 50];
+            const lightGray = [240, 240, 240];
+
+            // Header
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 40, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.text('INVOICE', 105, 25, { align: 'center' });
+
+            // Reset text color for main content
+            doc.setTextColor(...textColor);
+            doc.setFont('helvetica', 'normal');
+
+            // Company info
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Albany Vehicle Service', 20, 55);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('123 Albany Street, Chennai, India', 20, 62);
+            doc.text('Phone: +91 98765 43210', 20, 69);
+            doc.text('Email: support@albanyservice.com', 20, 76);
+
+            // Invoice details
+            doc.setFontSize(10);
+            doc.text('Invoice #:', 140, 55);
+            doc.text(`${data.invoiceId}`, 190, 55, { align: 'right' });
+
+            doc.text('Date:', 140, 62);
+            const dateStr = data.formattedCompletedDate ||
+                (data.completedDate ? new Date(data.completedDate).toLocaleDateString() : new Date().toLocaleDateString());
+            doc.text(dateStr, 190, 62, { align: 'right' });
+
+            doc.text('Status:', 140, 69);
+            doc.setFont('helvetica', 'bold');
+            doc.text(data.isPaid ? 'Paid' : 'Pending', 190, 69, { align: 'right' });
+            doc.setFont('helvetica', 'normal');
+
+            // Separator line
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 83, 190, 83);
+
+            // Customer and Vehicle info
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Bill To:', 20, 95);
+            doc.text('Vehicle Details:', 120, 95);
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text(data.customerName || 'Customer', 20, 102);
+            doc.text(data.customerEmail || 'N/A', 20, 109);
+            doc.text(data.customerPhone || 'N/A', 20, 116);
+
+            doc.text(`${data.vehicleBrand || ''} ${data.vehicleModel || ''}`, 120, 102);
+            doc.text(`Reg #: ${data.registrationNumber || 'N/A'}`, 120, 109);
+            doc.text(`Year: ${data.vehicleYear || 'N/A'}`, 120, 116);
+
+            // Separator line
+            doc.line(20, 125, 190, 125);
+
+            // Table header with background
+            doc.setFillColor(...lightGray);
+            doc.rect(20, 130, 170, 10, 'F');
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(10);
+            doc.text('Description', 22, 137);
+            doc.text('Quantity', 90, 137);
+            doc.text('Unit Price', 120, 137);
+            doc.text('Amount', 170, 137, { align: 'right' });
+
+            doc.setFont('helvetica', 'normal');
+
+            // Table content
+            let yPos = 147;
+
+            // Materials
+            if (data.materials && data.materials.length > 0) {
+                data.materials.forEach((material, index) => {
+                    if (!material) return;
+
+                    const name = material.name || 'Unknown Item';
+                    const quantity = material.quantity || 0;
+                    const unitPrice = material.unitPrice || 0;
+                    const total = quantity * unitPrice;
+
+                    // Alternate row background for readability
+                    if (index % 2 === 0) {
+                        doc.setFillColor(248, 248, 248);
+                        doc.rect(20, yPos - 6, 170, 10, 'F');
+                    }
+
+                    doc.text(`${name} (Part)`, 22, yPos);
+                    doc.text(`${quantity}`, 90, yPos);
+                    doc.text(`₹${this.formatCurrency(unitPrice)}`, 120, yPos);
+                    doc.text(`₹${this.formatCurrency(total)}`, 170, yPos, { align: 'right' });
+
+                    yPos += 10;
+
+                    // Add new page if needed
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 30;
+
+                        // Reset header on new page
+                        doc.setFillColor(...lightGray);
+                        doc.rect(20, 20, 170, 10, 'F');
+
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Description', 22, 27);
+                        doc.text('Quantity', 90, 27);
+                        doc.text('Unit Price', 120, 27);
+                        doc.text('Amount', 170, 27, { align: 'right' });
+
+                        doc.setFont('helvetica', 'normal');
+                    }
+                });
+            }
+
+            // Labor charges
+            if (data.laborCharges && data.laborCharges.length > 0) {
+                data.laborCharges.forEach((labor, index) => {
+                    if (!labor) return;
+
+                    const description = labor.description || 'Service Labor';
+                    const hours = labor.hours || 0;
+                    const rate = labor.rate || 0;
+                    const total = hours * rate;
+
+                    // Alternate row background
+                    if ((index + (data.materials?.length || 0)) % 2 === 0) {
+                        doc.setFillColor(248, 248, 248);
+                        doc.rect(20, yPos - 6, 170, 10, 'F');
+                    }
+
+                    doc.text(description, 22, yPos);
+                    doc.text(`${hours} hrs`, 90, yPos);
+                    doc.text(`₹${this.formatCurrency(rate)}/hr`, 120, yPos);
+                    doc.text(`₹${this.formatCurrency(total)}`, 170, yPos, { align: 'right' });
+
+                    yPos += 10;
+
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 30;
+
+                        // Reset header on new page
+                        doc.setFillColor(...lightGray);
+                        doc.rect(20, 20, 170, 10, 'F');
+
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Description', 22, 27);
+                        doc.text('Quantity', 90, 27);
+                        doc.text('Unit Price', 120, 27);
+                        doc.text('Amount', 170, 27, { align: 'right' });
+
+                        doc.setFont('helvetica', 'normal');
+                    }
+                });
+            }
+
+            // Premium discount if applicable
+            if (data.calculatedDiscount && parseFloat(data.calculatedDiscount) > 0) {
+                doc.setTextColor(0, 128, 0); // Green for discount
+                doc.text('Premium Membership Discount (30% off labor)', 22, yPos);
+                doc.text(`-₹${this.formatCurrency(data.calculatedDiscount)}`, 170, yPos, { align: 'right' });
+                doc.setTextColor(...textColor); // Reset text color
+
+                yPos += 10;
+            }
+
+            // Total calculation section
+            yPos += 5;
+            doc.line(100, yPos, 190, yPos);
+            yPos += 10;
+
+            doc.text('Subtotal:', 130, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedSubtotal)}`, 170, yPos, { align: 'right' });
+
+            yPos += 10;
+            doc.text('GST (18%):', 130, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedTax)}`, 170, yPos, { align: 'right' });
+
+            yPos += 10;
+            doc.line(100, yPos - 5, 190, yPos - 5);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total Amount:', 130, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedTotal)}`, 170, yPos, { align: 'right' });
+
+            // Footer
+            const pageCount = doc.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(100, 100, 100);
+
+                // Footer line
+                doc.setDrawColor(200, 200, 200);
+                doc.line(20, 280, 190, 280);
+
+                // Footer text
+                doc.text('This is a computer-generated invoice and does not require a signature.', 105, 287, { align: 'center' });
+                doc.text(`Page ${i} of ${pageCount}`, 190, 287, { align: 'right' });
+
+                // Add "PAID" watermark if the invoice is paid
+                if (data.isPaid) {
+                    doc.saveGraphicsState();
+                    doc.setGState(new doc.GState({ opacity: 0.3 }));
+                    doc.setTextColor(0, 128, 0);
+                    doc.setFont('helvetica', 'bold');
+                    doc.setFontSize(70);
+                    doc.text('PAID', 105, 160, {
+                        align: 'center',
+                        angle: 45
+                    });
+                    doc.restoreGraphicsState();
+                }
+            }
+
+            doc.save(`Albany_Invoice_${data.invoiceId}.pdf`);
+        }
+
+        generateServicePDF(data) {
+            if (typeof jspdf === 'undefined') {
+                setTimeout(() => this.generateServicePDF(data), 500);
+                return;
+            }
+
+            const { jsPDF } = jspdf;
+            const doc = new jsPDF();
+
+            // Set document properties
+            doc.setProperties({
+                title: `Albany Service Report #${data.requestId}`,
+                subject: 'Vehicle Service Report',
+                author: 'Albany Vehicle Service',
+                keywords: 'service, vehicle, report',
+                creator: 'Albany Service System'
+            });
+
+            // Colors
+            const primaryColor = [114, 47, 55]; // RGB for #722F37
+            const textColor = [50, 50, 50];
+            const lightGray = [240, 240, 240];
+
+            // Header
+            doc.setFillColor(...primaryColor);
+            doc.rect(0, 0, 210, 40, 'F');
+
+            doc.setTextColor(255, 255, 255);
+            doc.setFontSize(28);
+            doc.setFont('helvetica', 'bold');
+            doc.text('SERVICE REPORT', 105, 25, { align: 'center' });
+
+            // Reset text color for main content
+            doc.setTextColor(...textColor);
+            doc.setFont('helvetica', 'normal');
+
+            // Company info
+            doc.setFontSize(14);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Albany Vehicle Service', 105, 55, { align: 'center' });
+
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+            doc.text('123 Albany Street, Chennai, India', 105, 62, { align: 'center' });
+            doc.text('Phone: +91 98765 43210 | Email: support@albanyservice.com', 105, 69, { align: 'center' });
+
+            // Service info
+            doc.setFillColor(...lightGray);
+            doc.rect(20, 80, 170, 10, 'F');
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Service Details', 105, 87, { align: 'center' });
+
+            doc.setFont('helvetica', 'normal');
+            doc.setFontSize(10);
+
+            // Two column layout for service details
+            doc.text('Request ID:', 25, 100);
+            doc.text(`REQ-${data.requestId}`, 75, 100);
+
+            doc.text('Service Date:', 25, 110);
+            const serviceDate = data.formattedCompletedDate ||
+                (data.completedDate ? new Date(data.completedDate).toLocaleDateString() : 'N/A');
+            doc.text(serviceDate, 75, 110);
+
+            doc.text('Service Type:', 25, 120);
+            doc.text(data.serviceType || 'General Service', 75, 120);
+
+            doc.text('Service Advisor:', 25, 130);
+            doc.text(data.serviceAdvisorName || 'N/A', 75, 130);
+
+            // Vehicle Information
+            doc.text('Vehicle:', 120, 100);
+            doc.text(`${data.vehicleBrand} ${data.vehicleModel}`, 170, 100, { align: 'right' });
+
+            doc.text('Registration:', 120, 110);
+            doc.text(data.registrationNumber || 'N/A', 170, 110, { align: 'right' });
+
+            doc.text('Year:', 120, 120);
+            doc.text(data.vehicleYear ? data.vehicleYear.toString() : 'N/A', 170, 120, { align: 'right' });
+
+            doc.text('Category:', 120, 130);
+            doc.text(data.vehicleType || 'N/A', 170, 130, { align: 'right' });
+
+            // Separator line
+            doc.setDrawColor(200, 200, 200);
+            doc.line(20, 140, 190, 140);
+
+            // Materials Used
+            doc.setFillColor(...lightGray);
+            doc.rect(20, 150, 170, 10, 'F');
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Materials Used', 105, 157, { align: 'center' });
+
+            let yPos = 170;
+
+            if (!data.materials || data.materials.length === 0) {
+                doc.setFont('helvetica', 'italic');
+                doc.setFontSize(10);
+                doc.text('No materials were used for this service.', 105, yPos, { align: 'center' });
+                yPos += 15;
+            } else {
+                // Table header
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(10);
+                doc.text('Item', 25, yPos);
+                doc.text('Quantity', 100, yPos);
+                doc.text('Unit Price', 130, yPos);
+                doc.text('Total', 170, yPos, { align: 'right' });
+
+                yPos += 10;
+
+                // Table content
+                doc.setFont('helvetica', 'normal');
+
+                data.materials.forEach((material, index) => {
+                    if (!material) return;
+
+                    // Alternate row background
+                    if (index % 2 === 0) {
+                        doc.setFillColor(248, 248, 248);
+                        doc.rect(20, yPos - 6, 170, 10, 'F');
+                    }
+
+                    const name = material.name || 'Unknown Item';
+                    const quantity = material.quantity || 0;
+                    const unitPrice = material.unitPrice || 0;
+                    const total = quantity * unitPrice;
+
+                    doc.text(name, 25, yPos);
+                    doc.text(quantity.toString(), 100, yPos);
+                    doc.text(`₹${this.formatCurrency(unitPrice)}`, 130, yPos);
+                    doc.text(`₹${this.formatCurrency(total)}`, 170, yPos, { align: 'right' });
+
+                    yPos += 10;
+
+                    // Add new page if needed
+                    if (yPos > 270) {
+                        doc.addPage();
+                        yPos = 30;
+
+                        // Reset header on new page
+                        doc.setFillColor(...lightGray);
+                        doc.rect(20, 20, 170, 10, 'F');
+
+                        doc.setFont('helvetica', 'bold');
+                        doc.text('Item', 25, 27);
+                        doc.text('Quantity', 100, 27);
+                        doc.text('Unit Price', 130, 27);
+                        doc.text('Total', 170, 27, { align: 'right' });
+
+                        doc.setFont('helvetica', 'normal');
+                    }
+                });
+
+                yPos += 5;
+            }
+
+            // Charges Summary
+            doc.setFillColor(...lightGray);
+            doc.rect(20, yPos, 170, 10, 'F');
+
+            doc.setFontSize(12);
+            doc.setFont('helvetica', 'bold');
+            doc.text('Charges Summary', 105, yPos + 7, { align: 'center' });
+
+            yPos += 20;
+
+            // Create a summary table
+            doc.setFontSize(10);
+            doc.setFont('helvetica', 'normal');
+
+            doc.text('Materials Total:', 120, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedMaterialsTotal)}`, 170, yPos, { align: 'right' });
+
+            yPos += 10;
+            doc.text('Labor Charges:', 120, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedLaborTotal)}`, 170, yPos, { align: 'right' });
+
+            if (data.calculatedDiscount && parseFloat(data.calculatedDiscount) > 0) {
+                yPos += 10;
+                doc.setTextColor(0, 128, 0); // Green for discount
+                doc.text('Premium Discount:', 120, yPos);
+                doc.text(`-₹${this.formatCurrency(data.calculatedDiscount)}`, 170, yPos, { align: 'right' });
+                doc.setTextColor(...textColor); // Reset text color
+            }
+
+            yPos += 10;
+            doc.text('Subtotal:', 120, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedSubtotal)}`, 170, yPos, { align: 'right' });
+
+            yPos += 10;
+            doc.text('Tax (18% GST):', 120, yPos);
+            doc.text(`₹${this.formatCurrency(data.calculatedTax)}`, 170, yPos, { align: 'right' });
+
+            yPos += 10;
+            doc.setDrawColor(100, 100, 100);
+            doc.line(120, yPos - 2, 170, yPos - 2);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text('Total Amount:', 120, yPos + 5);
+            doc.text(`₹${this.formatCurrency(data.calculatedTotal)}`, 170, yPos + 5, { align: 'right' });
+
+            // Footer
+            const pageCount = doc.getNumberOfPages();
+            for (let i = 1; i <= pageCount; i++) {
+                doc.setPage(i);
+
+                doc.setFontSize(10);
+                doc.setFont('helvetica', 'normal');
+                doc.setTextColor(100, 100, 100);
+
+                // Footer line
+                doc.setDrawColor(200, 200, 200);
+                doc.line(20, 280, 190, 280);
+
+                // Footer text
+                doc.text('Thank you for choosing Albany Vehicle Service!', 105, 287, { align: 'center' });
+                doc.text(`Page ${i} of ${pageCount}`, 190, 287, { align: 'right' });
+            }
+
+            doc.save(`Albany_Service_Report_${data.requestId}.pdf`);
+        }
+
+        formatCurrency(amount) {
+            if (!amount) return '0.00';
+            return parseFloat(amount).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        window.profileManager = new ProfileManager();
+
+        const razorpayScript = document.createElement('script');
+        razorpayScript.src = 'https://checkout.razorpay.com/v1/checkout.js';
+        document.head.appendChild(razorpayScript);
+    });
+</script>
+</body>
+</html>
